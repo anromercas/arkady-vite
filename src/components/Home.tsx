@@ -1,6 +1,9 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { PartyPopper } from 'lucide-react';
+import Services from './Services';
+import { Link } from 'react-router-dom';
+import Footer from './Footer';
 
 function Home() {
   return (
@@ -10,7 +13,7 @@ function Home() {
         <div 
           className="absolute inset-0 bg-cover bg-center z-0"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1597095540293-b184e2b0d044?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')",
+            backgroundImage: "url('https://images.unsplash.com/photo-1551966775-a4ddc8df052b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
           }}
         >
           <div className="absolute inset-0 bg-black/50"></div>
@@ -25,62 +28,41 @@ function Home() {
               El espacio perfecto para celebrar cumpleaños, eventos y fiestas temáticas
             </p>
             <div className="flex gap-4">
-              <Button
-                size="lg"
-                className="bg-[#20c997] hover:bg-[#1ba884] text-white"
-                onClick={() => window.location.href = '/reservas'}
+             
+              <Link
+                to="/reservas"
+                className="inline-block bg-[#20c997] hover:bg-white text-white hover:text-[#20c997] font-bold py-3 px-8 rounded-full shadow-md transition-colors"
               >
                 Reservar Ahora
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-[#20c997] border-white hover:bg-white hover:text-[#20c997]"
-                onClick={() => window.location.href = '/packs'}
+              </Link>
+              <Link
+                to="/packs"
+                className="inline-block bg-white hover:text-white hover:bg-[#20c997] text-[#20c997] border-white font-bold py-3 px-8 rounded-full shadow-md transition-colors"
               >
-                Ver Packs
-              </Button>
+                Ver Tipos de Reservas
+              </Link>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div>
-              <div className="flex items-center mb-6">
-                <PartyPopper className="h-8 w-8 text-[#20c997]" />
-                <span className="ml-2 text-2xl font-bold">Arkady</span>
-              </div>
-              <p className="text-gray-400">
-                Creando momentos mágicos y recuerdos inolvidables para toda la familia.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Enlaces Rápidos</h3>
-              <ul className="space-y-2">
-                <li><a href="/" className="text-gray-400 hover:text-[#20c997]">Inicio</a></li>
-                <li><a href="/servicios" className="text-gray-400 hover:text-[#20c997]">Servicios</a></li>
-                <li><a href="/packs" className="text-gray-400 hover:text-[#20c997]">Packs</a></li>
-                <li><a href="/reservas" className="text-gray-400 hover:text-[#20c997]">Reservas</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Horario</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>Lunes a Viernes: 10:00 - 20:00</li>
-                <li>Sábados: 10:00 - 22:00</li>
-                <li>Domingos: 11:00 - 20:00</li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center">
-            <p className="text-gray-400">© 2024 Arkady Celebraciones. Todos los derechos reservados.</p>
-          </div>
-        </div>
-      </footer>
+      <Services></Services>
+
+      <div className="bg-[#FEE75C] py-20 text-center">
+        <h1 className="text-4xl font-bold mb-4 text-gray-800">
+          ¿Listo para celebrar?
+        </h1>
+        <p className="text-2xl text-gray-700 mb-6">
+          Reserva ahora para crear momentos mágicos y recuerdos inolvidables
+        </p>
+        <Link
+          to="/reservas"
+          className="inline-block bg-[#20c997] hover:bg-[#1ba884] text-white font-bold py-3 px-8 rounded-full shadow-md transition-colors"
+        >
+          Reservar Ahora
+        </Link>
+      </div>
+
     </div>
   );
 }
