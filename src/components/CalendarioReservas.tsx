@@ -366,6 +366,7 @@ export default function CalendarioReservas() {
           culture="es"
           formats={formats}
           views={{ month: true }}
+          longPressThreshold={10}
           onSelectSlot={(slotInfo) => handleDayClick(slotInfo.start)}
           selectable
           style={{ height: 400 }}
