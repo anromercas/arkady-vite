@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import logo from '/src/assets/arkady-logo.png';
 
 function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
   const linkClass = ({ isActive }) =>
-    isActive 
+    isActive
       ? 'text-[#20c997] font-semibold transition-colors'
       : 'text-gray-700 hover:text-[#20c997] transition-colors';
 
@@ -25,7 +28,25 @@ function Navbar() {
             <NavLink to="/faq" className={linkClass}>FAQ</NavLink>
             <NavLink to="/galeria" className={linkClass}>Galería</NavLink>
           </div>
+
+          <div className="md:hidden">
+            <button onClick={() => setIsOpen(!isOpen)}>
+              {isOpen ? <X className="text-gray-700" /> : <Menu className="text-gray-700" />}
+            </button>
+          </div>
         </div>
+
+        {isOpen && (
+          <div className="md:hidden mt-4 space-y-2 flex flex-col items-start">
+            <NavLink to="/" className={linkClass} onClick={() => setIsOpen(false)}>Inicio</NavLink>
+            <NavLink to="/servicios" className={linkClass} onClick={() => setIsOpen(false)}>Servicios</NavLink>
+            <NavLink to="/packs" className={linkClass} onClick={() => setIsOpen(false)}>Tipos de reservas</NavLink>
+            <NavLink to="/reservas" className={linkClass} onClick={() => setIsOpen(false)}>Reservas</NavLink>
+            <NavLink to="/contacto" className={linkClass} onClick={() => setIsOpen(false)}>Contacto</NavLink>
+            <NavLink to="/faq" className={linkClass} onClick={() => setIsOpen(false)}>FAQ</NavLink>
+            <NavLink to="/galeria" className={linkClass} onClick={() => setIsOpen(false)}>Galería</NavLink>
+          </div>
+        )}
       </div>
     </nav>
   );
