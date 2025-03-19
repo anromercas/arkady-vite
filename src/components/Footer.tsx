@@ -1,5 +1,6 @@
 import React from 'react';
-import { PartyPopper } from 'lucide-react';
+import logo from '/src/assets/arkady-logo.png';
+
 
 function Footer() {
   return (
@@ -8,7 +9,7 @@ function Footer() {
         <div className="grid md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center">
-              <img src="/src/assets/arkady-logo.png" alt="Arkady Logo" className="h-8 w-8" />
+              <img src={logo} alt="Arkady Logo" className="h-8 w-8" />
               <span className="ml-2 text-2xl font-bold">Arkady</span>
             </div>
             <p className="text-gray-400">
