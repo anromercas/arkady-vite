@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 export default defineConfig({
+  base: '/arcady-vite/',
   plugins: [react()],
   define: {
     'process.env': process.env,

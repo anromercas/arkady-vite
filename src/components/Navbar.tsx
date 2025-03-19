@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import logo from '/src/assets/arkady-logo.png';
 
 function Navbar() {
   const linkClass = ({ isActive }) =>
@@ -12,7 +13,7 @@ function Navbar() {
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <img src="/src/assets/arkady-logo.png" alt="Arkady Logo" className="h-12 w-12" />
+            <img src={logo} alt="Arkady Logo" className="h-12 w-12" />
             <span className="ml-2 text-2xl font-bold">Arkady</span>
           </div>
           <div className="hidden md:flex space-x-8">
