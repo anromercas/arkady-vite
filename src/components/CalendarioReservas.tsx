@@ -298,7 +298,7 @@ export default function CalendarioReservas() {
     if (status === 'ocupado') {
       return {
         style: {
-          backgroundColor: 'gray',
+          backgroundColor: '#ff6961',
           color: 'white',
         },
       };
@@ -307,7 +307,7 @@ export default function CalendarioReservas() {
       return {
         style: {
           backgroundImage:
-            'repeating-linear-gradient(45deg, #ccc, #ccc 5px, #fff 5px, #fff 10px)',
+            'repeating-linear-gradient(45deg, #ff9688, #ff9688 5px, #fff 5px, #fff 10px)',
         },
       };
     }
@@ -366,7 +366,7 @@ export default function CalendarioReservas() {
           culture="es"
           formats={formats}
           views={{ month: true }}
-          longPressThreshold={10}
+          longPressThreshold={1}
           onSelectSlot={(slotInfo) => handleDayClick(slotInfo.start)}
           selectable
           style={{ height: 400 }}
@@ -377,15 +377,15 @@ export default function CalendarioReservas() {
 
       <div className="mt-4 flex justify-center gap-4">
         <div className="flex items-center gap-2">
-          <div className="w-5 h-5 bg-gray-300 border"></div>
+          <div className="w-5 h-5 bg-gray-200 border"></div>
           <span>Día disponible</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-5 h-5 bg-gray-400 bg-[repeating-linear-gradient(45deg,_#ccc,_#ccc_5px,_#fff_5px,_#fff_10px)] border"></div>
+          <div className="w-5 h-5 bg-gray-400 bg-[repeating-linear-gradient(45deg,_#ff9688,_#ff9688,_#fff_5px,_#fff_10px)] border"></div>
           <span>Día parcialmente ocupado</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-5 h-5 bg-gray-600 border"></div>
+          <div className="w-5 h-5 bg-[#ff6961] border"></div>
           <span>Día completamente ocupado</span>
         </div>
       </div>
