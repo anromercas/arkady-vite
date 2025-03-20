@@ -339,13 +339,57 @@ export default function CalendarioReservas() {
 
   const dayStatus = fechaSeleccionada ? getDayStatus(fechaSeleccionada) : 'libre';
 
+  // const availableSlots = tramosHorarios.filter((tramo) => {
+  //   // Si el día está parcialmente ocupado, no mostramos el tramo completo
+  //   if (dayStatus === 'parcial' && tramo.label === '10:00 - 22:00') {
+  //     return false;
+  //   }
+  //   return !isSlotReserved(tramo.label, reservedSlots);
+  // });
+
+  // Reemplaza tu declaración actual de availableSlots con esto:
   const availableSlots = tramosHorarios.filter((tramo) => {
-    // Si el día está parcialmente ocupado, no mostramos el tramo completo
+    // Oculta "día completo" si el día está parcialmente ocupado
     if (dayStatus === 'parcial' && tramo.label === '10:00 - 22:00') {
       return false;
     }
+
+    // Determina si es horario de verano para la fecha seleccionada
+    const verano = fechaSeleccionada ? isDaylightSavingTime(fechaSeleccionada) : false;
+
+    // Lógica para filtrar horarios según sea verano o invierno
+    if (verano) {
+      // Horario de verano (10:00-22:00, 10:00-15:00 y 18:00-23:00)
+      if (tramo.label === '17:00 - 22:00') return false;
+    } else {
+      // Horario de invierno (10:00-22:00, 10:00-15:00 y 17:00-22:00)
+      if (tramo.label === '18:00 - 23:00') return false;
+    }
+
+    // Comprobación de si el tramo ya está reservado
     return !isSlotReserved(tramo.label, reservedSlots);
   });
+
+  // Function to get the last Sunday of a month
+  function lastSunday(month: number, year: number): Date {
+    const lastDay = new Date(year, month + 1, 0);
+    const dayOfWeek = lastDay.getDay();
+    return new Date(year, month, lastDay.getDate() - dayOfWeek);
+  }
+
+  // Function that determines if a date is in daylight saving time
+  function isDaylightSavingTime(date: Date): boolean {
+    const year = date.getFullYear();
+
+    const summerStart = lastSunday(2, year);  // March
+    summerStart.setHours(2, 0, 0);
+
+    const winterStart = lastSunday(9, year); // October
+    winterStart.setHours(3, 0, 0);
+
+    return date >= summerStart && date < winterStart;
+  }
+
 
   const messages = {
     previous: 'Anterior',
