@@ -6,6 +6,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { CreditCard } from 'lucide-react';
+
 
 interface Reserva {
   nombre: string;
@@ -38,8 +40,8 @@ const formats = {
 const tramosHorarios = [
   { label: '10:00 - 22:00', startHour: 10, endHour: 22 },
   { label: '10:00 - 15:00', startHour: 10, endHour: 15 },
-  { label: '17:00 - 22:00', startHour: 17, endHour: 22 },
-  { label: '18:00 - 23:00', startHour: 18, endHour: 23 },
+  { label: '16:00 - 21:00', startHour: 17, endHour: 22 },
+  { label: '17:00 - 22:00', startHour: 18, endHour: 23 },
 ];
 
 // Endpoint para obtener reservas
@@ -108,7 +110,7 @@ export default function CalendarioReservas() {
     if (slots.includes('10:00 - 22:00')) return 'ocupado';
     if (
       slots.includes('10:00 - 15:00') &&
-      (slots.includes('17:00 - 22:00') || slots.includes('18:00 - 23:00'))
+      (slots.includes('16:00 - 21:00') || slots.includes('17:00 - 22:00'))
     )
       return 'ocupado';
     return 'parcial';
@@ -325,8 +327,8 @@ export default function CalendarioReservas() {
 
   // Función auxiliar para determinar si un tramo está reservado, considerando la complementariedad
   const isSlotReserved = (slot: string, reservedSlots: string[]): boolean => {
-    if (slot === '17:00 - 22:00' || slot === '18:00 - 23:00') {
-      return reservedSlots.includes('17:00 - 22:00') || reservedSlots.includes('18:00 - 23:00');
+    if (slot === '16:00 - 21:00' || slot === '17:00 - 22:00') {
+      return reservedSlots.includes('16:00 - 21:00') || reservedSlots.includes('17:00 - 22:00');
     }
     return reservedSlots.includes(slot);
   };
@@ -360,10 +362,10 @@ export default function CalendarioReservas() {
     // Lógica para filtrar horarios según sea verano o invierno
     if (verano) {
       // Horario de verano (10:00-22:00, 10:00-15:00 y 18:00-23:00)
-      if (tramo.label === '17:00 - 22:00') return false;
+      if (tramo.label === '16:00 - 21:00') return false;
     } else {
       // Horario de invierno (10:00-22:00, 10:00-15:00 y 17:00-22:00)
-      if (tramo.label === '18:00 - 23:00') return false;
+      if (tramo.label === '17:00 - 22:00') return false;
     }
 
     // Comprobación de si el tramo ya está reservado
@@ -544,19 +546,7 @@ export default function CalendarioReservas() {
 
         </div>
       )}
-      <div className="mt-12 text-center max-w-4xl mx-auto">
-        <h4 className="text-xl font-semibold mb-4">Confirmación y Formas de Pago</h4>
-        <p>Para confirmar tu reserva, <strong>se requiere un depósito de 75 €</strong>, que deberá abonarse en las <strong>24 horas</strong> siguientes a la solicitud. Este importe será reembolsado al día siguiente del evento, tras verificar el cumplimiento de nuestras normas y condiciones.</p>
-        <ul className="mt-4 text-left inline-block">
-          <li><strong>Bizum:</strong> al número 655 312 918</li>
-          <li><strong>Transferencia bancaria:</strong>
-            <ul className="ml-4">
-              <li>IBAN: ES7021007789310200093283</li>
-              <li>Concepto: Nombre completo y fecha/hora de la reserva</li>
-            </ul>
-          </li>
-        </ul>
-      </div>
+      
     </div>
   );
 }

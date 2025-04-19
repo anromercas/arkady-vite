@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from '/src/assets/arkady-logo.png';
+import { Link } from 'react-router-dom';
 
 
 function Footer() {
@@ -20,49 +21,76 @@ function Footer() {
             <h3 className="text-lg font-semibold mb-4">Enlaces Rápidos</h3>
             <ul className="grid grid-cols-2 gap-y-2 gap-x-4">
               <li>
-                <a href="/" className="text-gray-400 hover:text-[#20c997]">
+                <Link
+                  to="/"
+                  className="text-gray-400 hover:text-[#20c997]"
+                >
                   Inicio
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/servicios" className="text-gray-400 hover:text-[#20c997]">
+                <Link
+                  to="/servicios"
+                  className="text-gray-400 hover:text-[#20c997]"
+                >
                   Servicios
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/packs" className="text-gray-400 hover:text-[#20c997]">
+                <Link
+                  to="/packs"
+                  className="text-gray-400 hover:text-[#20c997]"
+                >
                   Tipos de reservas
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/reservas" className="text-gray-400 hover:text-[#20c997]">
+                <Link
+                  to="/reservas"
+                  className="text-gray-400 hover:text-[#20c997]"
+                >
                   Reservas
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/contacto" className="text-gray-400 hover:text-[#20c997]">
+                <Link
+                  to="/contacto"
+                  className="text-gray-400 hover:text-[#20c997]"
+                >
                   Contacto
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/faq" className="text-gray-400 hover:text-[#20c997]">
+                <Link
+                  to="/faq"
+                  className="text-gray-400 hover:text-[#20c997]"
+                >
                   FAQ
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/normas-uso" className="text-gray-400 hover:text-[#20c997]">
+                <Link
+                  to="/normas-uso"
+                  className="text-gray-400 hover:text-[#20c997]"
+                >
                   Normas
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/politica-privacidad" className="text-gray-400 hover:text-[#20c997]">
+                <Link
+                  to="/politica-privacidad"
+                  className="text-gray-400 hover:text-[#20c997]"
+                >
                   Política
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/politica-cookies" className="text-gray-400 hover:text-[#20c997]">
+                <Link
+                  to="/politica-cookies"
+                  className="text-gray-400 hover:text-[#20c997]"
+                >
                   Cookies
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -70,8 +98,8 @@ function Footer() {
             <h3 className="text-lg font-semibold mb-4">Horarios de reserva:</h3>
             <ul className="space-y-2 text-gray-400">
               <li>Mañanas: 10:00 h a 15:00 h</li>
-              <li>Tardes: 17:00 h a 22:00 h o 18:00 h a 23:00 h</li>
-              <li>Día completo: 10:00 h a 23:00 h</li>
+              <li>Tardes: 16:00 h a 21:00 h o 17:00 h a 22:00 h</li>
+              <li>Día completo: 10:00 h a 22:00 h</li>
             </ul>
           </div>
         </div>

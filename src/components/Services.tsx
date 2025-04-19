@@ -11,8 +11,7 @@ function Services() {
               ¿Por qué elegir Arkady?
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Ofrecemos experiencias únicas y personalizadas para que cada
-              celebración sea especial
+              En Arkady Celebraciones te ofrecemos <b>experiencias únicas y personalizadas</b>, para que cada evento sea verdaderamente especial. Nuestro espacio está diseñado para adaptarse a todo tipo de celebraciones, siempre en un entorno <b>seguro, exclusivo y lleno de diversión</b>.
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-12">
@@ -20,14 +19,11 @@ function Services() {
               <div className="bg-[#20c997]/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Cake className="h-8 w-8 text-[#20c997]" />
               </div>
-              <h3 className="text-xl font-semibold mb-4">Cumpleaños</h3>
+              <h3 className="text-xl font-semibold mb-4">Cumpleaños Infantiles</h3>
               <p className="text-gray-600">
-                <b className="text-l text-[#20c997] font-semibold mb-4"> 🎉 Celebra el cumpleaños de tu hijo/a 🎉 </b>
+                <b className="text-l text-[#20c997] font-semibold mb-4"> 🎉 ¡Haz que el cumpleaños de tu hijo/a sea inolvidable! 🎉 </b>
                 < br />
-                Un espacio lleno de diversión donde los niños podrán disfrutar de
-                todas las atracciones del parque rodeados de amigos y
-                familiares. ¡Un cumpleaños inolvidable en un entorno seguro y
-                exclusivo!
+                Un espacio lleno de juegos, alegría y emoción, donde los peques podrán disfrutar de todas las atracciones del parque acompañados de amigos y familiares.
               </p>
             </div>
             <div className="text-center p-6 rounded-lg bg-white shadow-lg hover:shadow-xl transition-shadow">
@@ -36,24 +32,20 @@ function Services() {
               </div>
               <h3 className="text-xl font-semibold mb-4">Comuniones</h3>
               <p className="text-gray-600">
-              <b className="text-l text-[#20c997] font-semibold mb-4">🎈 Fiestas de Primera Comunión llenas de diversión 🎈 </ b>
+                <b className="text-l text-[#20c997] font-semibold mb-4">🎈 Celebra este momento tan especial con una fiesta a lo grande. 🎈 </ b>
                 < br />
-                Haz de este día un recuerdo especial con actividades emocionantes en
-                nuestro parque infantil privado. Los niños se lo pasarán en
-                grande mientras celebran un momento tan importante en sus vidas.
+                Ofrecemos un entorno privado con actividades emocionantes, donde los niños vivirán un día único lleno de diversión y buenos recuerdos.
               </p>
             </div>
             <div className="text-center p-6 rounded-lg bg-white shadow-lg hover:shadow-xl transition-shadow">
               <div className="bg-[#20c997]/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Drama className="h-8 w-8 text-[#20c997]" />
               </div>
-              <h3 className="text-xl font-semibold mb-4">Fiestas temáticas</h3>
+              <h3 className="text-xl font-semibold mb-4">Fiestas Temáticas</h3>
               <p className="text-gray-600">
-              <b className="text-l text-[#20c997] font-semibold mb-4"> 🎭 Fiestas temáticas para los más pequeños 🎭 </b>
+                <b className="text-l text-[#20c997] font-semibold mb-4"> 🎭 Superhéroes, princesas, piratas... ¡lo que imagines! 🎭 </b>
                 < br />
-                Superhéroes, princesas, piratas y mucho más. Decora el parque con la temática
-                elegida y deja que los niños se sumerjan en un mundo de fantasía
-                y aventuras.
+                Decora el espacio con la temática que más te guste y deja que los niños se sumerjan en un mundo de fantasía y aventuras.
               </p>
             </div>
             <div className="text-center p-6 rounded-lg bg-white shadow-lg hover:shadow-xl transition-shadow">
@@ -61,14 +53,12 @@ function Services() {
                 <UsersRound className="h-8 w-8 text-[#20c997]" />
               </div>
               <h3 className="text-xl font-semibold mb-4">
-                Reuniones familiares
+                Reuniones Familiares
               </h3>
               <p className="text-gray-600">
-              <b className="text-l text-[#20c997] font-semibold mb-4">👨‍👩‍👧‍👦 Reuniones familiares en un ambiente especial 👨‍👩‍👧‍👦 </b>
+                <b className="text-l text-[#20c997] font-semibold mb-4">👨‍👩‍👧‍👦 Un punto de encuentro ideal para todas las edades. 👨‍👩‍👧‍👦 </b>
                 < br />
-                Disfruta de un día único en Arkady, donde los niños se divierten
-                mientras los adultos disfrutan de un espacio acogedor y seguro.
-                ¡Juega, comparte y crea recuerdos inolvidables!
+                Mientras los niños se entretienen en las zonas de juego, los adultos pueden disfrutar de un ambiente cómodo y acogedor. ¡Diversión y tranquilidad para todos!
               </p>
             </div>
             <div className="text-center p-6 rounded-lg bg-white shadow-lg hover:shadow-xl transition-shadow">
@@ -76,35 +66,32 @@ function Services() {
                 <GraduationCap className="h-8 w-8 text-[#20c997]" />
               </div>
               <h3 className="text-xl font-semibold mb-4">
-                Reuniones juveniles
+                Reuniones Juveniles
               </h3>
               <p className="text-gray-600">
-              <b className="text-l text-[#20c997] font-semibold mb-4">🎮 ¡Reunión épica de jóvenes en Arkady! 🎮 </b>
+                <b className="text-l text-[#20c997] font-semibold mb-4">🎮 Una sala solo para vosotros, sin interrupciones. 🎮 </b>
                 < br />
-                PlayStation, máquina arcade y futbolín en un espacio privado solo para
-                vosotros. ¡Risas, competencia y pura diversión garantizada!
+                Máquinas arcade, futbolín, diana... Perfecto para tardes de risas, pique sano y mucha diversión entre amigos.
               </p>
             </div>
             <div className="text-center p-6 rounded-lg bg-white shadow-lg hover:shadow-xl transition-shadow">
               <div className="bg-[#20c997]/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Baby className="h-8 w-8 text-[#20c997]" />
               </div>
-              <h3 className="text-xl font-semibold mb-4">Baby shower</h3>
+              <h3 className="text-xl font-semibold mb-4">Baby Showers</h3>
               <p className="text-gray-600">
-              <b className="text-l text-[#20c997] font-semibold mb-4">🤰 Un Baby Shower único y especial 🤰 </b>
+                <b className="text-l text-[#20c997] font-semibold mb-4">🤰 Celebra la llegada del nuevo miembro de la familia en un entorno íntimo y cuidado. 🤰 </b>
                 < br />
-                Reserva nuestro parque infantil en exclusiva y celebra este momento tan especial
-                rodeada de tus seres queridos. Un ambiente acogedor y
-                completamente equipado para una celebración inolvidable.
+                Dispondrás del parque en exclusiva, con todo lo necesario para disfrutar de una celebración cálida, emotiva y llena de detalles.
               </p>
             </div>
           </div>
           <div className="text-center mb-16 mt-20">
             <p className="text-gray-600 max-w-2xl mx-auto mb-4">
-              En Arkady Celebraciones, nos comprometemos a hacer de tu evento una experiencia memorable.
+              En <b>Arkady Celebraciones</b> nos volcamos en que cada evento sea una experiencia única, fácil de organizar y ¡difícil de olvidar!
             </p>
             <h2 className="text-4xl font-bold text-gray-800">
-              ¡Esperamos recibirte pronto!
+              ¿Te vienes?
             </h2>
           </div>
         </div>
