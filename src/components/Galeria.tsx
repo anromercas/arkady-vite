@@ -1,10 +1,25 @@
 import React, { useState } from 'react';
-import instalacion1 from '../assets/galeria/instalacion1.jpg';
-import instalacion2 from '../assets/galeria/instalacion2.jpg';
-import instalacion3 from '../assets/galeria/instalacion3.jpg';
-import instalacion4 from '../assets/galeria/instalacion4.jpg';
-import instalacion5 from '../assets/galeria/instalacion5.jpg';
-import instalacion6 from '../assets/galeria/instalacion6.jpg';
+import instalacion1 from '../assets/galeria/arkadycelebraciones-1.jpeg';
+import instalacion2 from '../assets/galeria/arkadycelebraciones-2.jpeg';
+import instalacion3 from '../assets/galeria/arkadycelebraciones-3.jpeg';
+import instalacion4 from '../assets/galeria/arkadycelebraciones-4.jpeg';
+import instalacion5 from '../assets/galeria/arkadycelebraciones-5.jpeg';
+import instalacion6 from '../assets/galeria/arkadycelebraciones-6.jpeg';
+import instalacion7 from '../assets/galeria/arkadycelebraciones-7.jpeg';
+import instalacion8 from '../assets/galeria/arkadycelebraciones-8.jpeg';
+import instalacion9 from '../assets/galeria/arkadycelebraciones-9.jpeg';
+import instalacion10 from '../assets/galeria/arkadycelebraciones-10.jpeg';
+import instalacion11 from '../assets/galeria/arkadycelebraciones-11.jpeg';
+import instalacion12 from '../assets/galeria/arkadycelebraciones-12.jpeg';
+import instalacion13 from '../assets/galeria/arkadycelebraciones-13.jpeg';
+import instalacion14 from '../assets/galeria/arkadycelebraciones-14.jpeg';
+import instalacion15 from '../assets/galeria/arkadycelebraciones-15.jpeg';
+import instalacion16 from '../assets/galeria/arkadycelebraciones-16.jpeg';
+import instalacion17 from '../assets/galeria/arkadycelebraciones-17.jpeg';
+import instalacion18 from '../assets/galeria/arkadycelebraciones-18.jpeg';
+import instalacion19 from '../assets/galeria/arkadycelebraciones-19.jpeg';
+import instalacion20 from '../assets/galeria/arkadycelebraciones-20.jpeg';
+
 
 const imagenes = [
   { src: instalacion1, alt: 'Instalación 1' },
@@ -13,6 +28,20 @@ const imagenes = [
   { src: instalacion4, alt: 'Instalación 4' },
   { src: instalacion5, alt: 'Instalación 5' },
   { src: instalacion6, alt: 'Instalación 6' },
+  { src: instalacion7, alt: 'Instalación 7' },
+  { src: instalacion8, alt: 'Instalación 8' },
+  { src: instalacion9, alt: 'Instalación 9' },
+  { src: instalacion10, alt: 'Instalación 10' },
+  { src: instalacion11, alt: 'Instalación 11' },
+  { src: instalacion12, alt: 'Instalación 12' },
+  { src: instalacion13, alt: 'Instalación 13' },
+  { src: instalacion14, alt: 'Instalación 14' },
+  { src: instalacion15, alt: 'Instalación 15' },
+  { src: instalacion16, alt: 'Instalación 16' },
+  { src: instalacion17, alt: 'Instalación 17' },
+  { src: instalacion18, alt: 'Instalación 18' },
+  { src: instalacion19, alt: 'Instalación 19' },
+  { src: instalacion20, alt: 'Instalación 20' },
 ];
 
 export default function Galeria() {

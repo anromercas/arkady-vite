@@ -85,7 +85,7 @@ export default function NormasUso() {
           <h3 className="font-semibold mt-2">Máquina de palomitas</h3>
           <ul className="list-disc ml-5">
             <li>Incluye <b>20 servicios</b>.</li>
-            <li>Sabores: ngredientes: Maíz, aceite y sal.<b>(Sin gluten)</b></li>
+            <li>Ingredientes: Maíz, aceite y sal.<b>(Sin gluten)</b></li>
           </ul>
           <p className="mt-2">Si necesitas más servicios, consúltanos con al menos <b>24 horas de antelación</b>.</p>
           <p className="mt-2">
@@ -126,7 +126,6 @@ export default function NormasUso() {
           </h2>
           <ul className="list-disc ml-5 mt-2"> {/* Added mt-2 */}
             <li>Deja mesas y suelos <b>limpios y recogidos</b>.</li>
-            <li>Retira cualquier <b>confeti o purpurina</b>.</li>
             <li>Apaga y guarda juguetes y dispositivos eléctricos.</li>
             <li>Asegúrate de que las bolas del parque están <b>dentro de su piscina</b>.</li>
             <li>Deposita la basura en el <b>contenedor exterior</b>.</li>

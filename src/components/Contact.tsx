@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Instagram } from 'lucide-react';
+import { MapPin, Phone, Mail, Instagram, Facebook, Music2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -101,6 +101,34 @@ function Contact() {
                     </a>
                 </div>
               </div>
+              <div className="flex items-center mb-8">
+                <Facebook className="h-6 w-6 text-[#20c997] mr-4" />
+                <div>
+                  <h3 className="font-semibold mb-1">Facebook</h3>
+                  <a
+                      href="https://www.facebook.com/share/14dFof54WY/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-[#20c997]"
+                    >
+                      Arkady Celebraciones
+                    </a>
+                </div>
+              </div>
+              <div className="flex items-center mb-8">
+                <Music2 className="h-6 w-6 text-[#20c997] mr-4" />
+                <div>
+                  <h3 className="font-semibold mb-1">TikTok</h3>
+                  <a
+                      href="https://www.tiktok.com/@arkadycelebraciones?_t=ZN-8vmc1jCZRYc&_r=1"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-[#20c997]"
+                    >
+                      @arkadycelebraciones
+                    </a>
+                </div>
+              </div>
             </div>
             {/* Formulario de contacto */}
             <div className="bg-white p-8 rounded-lg shadow-lg">
@@ -137,7 +165,7 @@ function Contact() {
                   </label>
                   <textarea
                     name="message"
-                    rows={4}
+                    rows={8}
                     value={formData.message}
                     onChange={handleChange}
                     className="w-full px-4 py-2 border rounded-md focus:ring-[#20c997] focus:border-[#20c997]"

@@ -199,7 +199,7 @@ const faqData: { question: string; answer: React.ReactNode }[] = [
     question: "¿Qué tipo de celebraciones se pueden realizar en Arkady?",
     answer: (
       <>
-        Además de cumpleaños infantiles, Arkady es perfecto para comuniones, reuniones familiares, eventos temáticos o celebraciones entre amigos. Tenemos entretenimiento para todas las edades: cocinita, juguetes, diana, PlayStation, futbolín y arcade retro.
+        Además de cumpleaños infantiles, Arkady es perfecto para comuniones, reuniones familiares, eventos temáticos o celebraciones entre amigos. Tenemos entretenimiento para todas las edades: cocinita, juguetes, diana, futbolín y arcade retro.
       </>
     ),
   },

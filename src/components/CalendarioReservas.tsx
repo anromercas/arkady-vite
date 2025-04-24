@@ -182,12 +182,15 @@ export default function CalendarioReservas() {
       nuevosErrores.email = 'El formato del email es inválido';
     }
 
-    // Validación de DNI (8 dígitos + una letra)
-    const dniRegex = /^\d{8}[A-Za-z]$/;
+    // Validación de DNI, NIE o NIF español
+    // DNI: 8 dígitos + letra
+    // NIE: X/Y/Z + 7 dígitos + letra
+    // NIF (jurídico): K/L/M + 7 dígitos + letra o dígito
+    const dniNieNifRegex = /^([XYZ]\d{7}[A-Z]|\d{8}[A-Z]|[KLM]\d{7}[A-J0-9])$/i;
     if (!formData.dni.trim()) {
-      nuevosErrores.dni = 'El DNI es obligatorio';
-    } else if (!dniRegex.test(formData.dni)) {
-      nuevosErrores.dni = 'El formato del DNI es inválido';
+      nuevosErrores.dni = 'El DNI/NIE/NIF es obligatorio';
+    } else if (!dniNieNifRegex.test(formData.dni)) {
+      nuevosErrores.dni = 'El formato del DNI/NIE/NIF es inválido';
     }
 
     // Validación de teléfono (9 dígitos)
@@ -462,9 +465,9 @@ export default function CalendarioReservas() {
             {['nombre', 'email', 'dni', 'telefono'].map((field) => (
               <div key={field} className="mb-2">
                 <label className="block">
-                  {field === 'nombre'
-                    ? 'Nombre y Apellidos:'
-                    : `${field.charAt(0).toUpperCase() + field.slice(1)}:`}
+                  {field === 'nombre' ? 'Nombre y Apellidos:' 
+                  : field === 'dni'   ? 'DNI/NIF/NIE:' 
+                  : `${field.charAt(0).toUpperCase() + field.slice(1)}:`}
                 </label>
                 <input
                   type={field === 'email' ? 'email' : 'text'}

@@ -85,7 +85,7 @@ function Reservations() {
                 <div>
                   <strong>Transferencia bancaria:</strong>
                   <ul className="ml-6 list-disc">
-                    <li>IBAN: ES7021007789310200093283</li>
+                    <li>IBAN: ES19 0081 0288 7400 0187 9092</li>
                     <li>Concepto: Nombre completo y fecha/hora de la reserva</li>
                   </ul>
                 </div>

@@ -26,7 +26,7 @@ function Navbar() {
             <NavLink to="/reservas" className={linkClass}>Reservas</NavLink>
             <NavLink to="/contacto" className={linkClass}>Contacto</NavLink>
             <NavLink to="/faq" className={linkClass}>FAQ</NavLink>
-            {/* <NavLink to="/galeria" className={linkClass}>Galería</NavLink> */}
+            <NavLink to="/galeria" className={linkClass}>Galería</NavLink>
           </div>
 
           <div className="md:hidden">
