@@ -104,7 +104,7 @@ function Packs() {
                   <Euro className='h-5 w-5 text-[#20c997] mr-2' />
                   <span><b>Precio:</b><br />
                     <b>Lunes a Jueves:</b> 85 €<br />
-                    <b>Viernes a Domingos, Festivos y Vísperas de Festivos:</b> 100 €
+                    <b>Viernes a Domingos, Festivos y Vísperas de Festivos:</b> 130 €
                   </span>
                 </li>
                 <li className='flex items-center'>
