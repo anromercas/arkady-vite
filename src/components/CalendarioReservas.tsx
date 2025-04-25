@@ -186,11 +186,12 @@ export default function CalendarioReservas() {
     // DNI: 8 dígitos + letra
     // NIE: X/Y/Z + 7 dígitos + letra
     // NIF (jurídico): K/L/M + 7 dígitos + letra o dígito
-    const dniNieNifRegex = /^([XYZ]\d{7}[A-Z]|\d{8}[A-Z]|[KLM]\d{7}[A-J0-9])$/i;
+    // Validación de DNI / NIE / NIF / Pasaporte
+    const idRegex = /^([XYZ]\d{7}[A-Z]|\d{8}[A-Z]|[KLM]\d{7}[A-J0-9]|[A-Z]\d{7}[A-Z]|[A-Z]{2}\d{7,8})$/i;
     if (!formData.dni.trim()) {
-      nuevosErrores.dni = 'El DNI/NIE/NIF es obligatorio';
-    } else if (!dniNieNifRegex.test(formData.dni)) {
-      nuevosErrores.dni = 'El formato del DNI/NIE/NIF es inválido';
+      nuevosErrores.dni = 'El DNI/NIE/NIF/Pasaporte es obligatorio';
+    } else if (!idRegex.test(formData.dni.toUpperCase())) {
+      nuevosErrores.dni = 'El formato del DNI/NIE/NIF/Pasaporte es inválido';
     }
 
     // Validación de teléfono (9 dígitos)
@@ -466,7 +467,7 @@ export default function CalendarioReservas() {
               <div key={field} className="mb-2">
                 <label className="block">
                   {field === 'nombre' ? 'Nombre y Apellidos:' 
-                  : field === 'dni'   ? 'DNI/NIF/NIE:' 
+                  : field === 'dni'   ? 'DNI/NIE/NIF/Pasaporte:' 
                   : `${field.charAt(0).toUpperCase() + field.slice(1)}:`}
                 </label>
                 <input
