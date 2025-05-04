@@ -1,25 +1,16 @@
 import React from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './components/Home';
-import Layout from './components/Layout';
-import Services from './components/Services';
-import Packs from './components/Packs';
-import Reservations from './components/Reservations';
-import Contact from './components/Contact';
-import NormasUso from './components/NormasUso';
-import FAQPage from './components/FAQ';
-import PoliticaPrivacidad from './components/PoliticaPrivacidad';
-import CookieConsent from "react-cookie-consent";
-import PoliticaCookies from './components/PoliticaCookies';
+import { HashRouter as Router } from 'react-router-dom';
+import MainRoutes from './routes/MainRoutes';
 import ScrollToTop from './components/ScrollToTop';
-import Galeria from './components/Galeria';
+import CookieConsent from "react-cookie-consent";
+import { HelmetProvider } from 'react-helmet-async';
 
 function App() {
   return (
     <Router>
       <ScrollToTop />
       <div className="min-h-screen bg-white">
-      <CookieConsent
+        <CookieConsent
           location="bottom"
           buttonText="Aceptar"
           cookieName="miCookieConsentimiento"
@@ -32,21 +23,10 @@ function App() {
             Más información
           </a>
         </CookieConsent>
-        
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/servicios" element={<Services />} />
-            <Route path="/packs" element={<Packs />} />
-            <Route path="/reservas" element={<Reservations />} />
-            <Route path="/contacto" element={<Contact />} />
-            <Route path="/faq" element={<FAQPage />} />
-            <Route path="/galeria" element={<Galeria />} />
-            <Route path="/normas-uso" element={<NormasUso />} />
-            <Route path="/politica-privacidad" element={<PoliticaPrivacidad />} />
-            <Route path="/politica-cookies" element={<PoliticaCookies />} />
-          </Route>
-        </Routes>
+
+        <HelmetProvider>
+          <MainRoutes />
+        </HelmetProvider>
       </div>
     </Router>
   );

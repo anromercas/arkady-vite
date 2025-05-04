@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 // Import necessary icons from lucide-react
 import { HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import Seo from '../seo/Seo';
 
 // FAQ data array with highlighted bold segments based on the original document
 const faqData: { question: string; answer: React.ReactNode }[] = [
@@ -271,35 +272,42 @@ export default function FAQPage() {
   };
 
   return (
-    <div className="pt-20 bg-gradient-to-b from-[#20c997]/10 to-white hero-pattern">
-      <div className="container mx-auto p-6 py-20 ">
-        <h1 className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-3">
-          <HelpCircle size={36} className="text-[#20c997]" />
-          Preguntas Frecuentes
-        </h1>
-        <div className="space-y-4 max-w-4xl mx-auto">
-          {faqData.map((item, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-              <button
-                onClick={() => toggleAccordion(index)}
-                className="w-full text-left p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none transition-colors duration-200"
-              >
-                <div className="flex justify-between items-center">
-                  <span className="font-semibold text-lg text-gray-800">{item.question}</span>
-                  <span className="text-gray-500">
-                    {openIndex === index ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
-                  </span>
-                </div>
-              </button>
-              {openIndex === index && (
-                <div className="p-5 text-gray-700 bg-white border-t border-gray-200">
-                  {item.answer}
-                </div>
-              )}
-            </div>
-          ))}
+    <>
+      <Seo
+        title="Preguntas Frecuentes | Arkady Celebraciones Sevilla"
+        description="Resolvemos tus dudas frecuentes sobre reservas, normas, servicios, horarios y pagos. Todo lo que necesitas saber sobre Arkady."
+        keywords="preguntas frecuentes Arkady, dudas alquiler sala Sevilla, normas uso parque de bolas, reserva local fiestas Sevilla"
+      />
+      <div className="pt-20 bg-gradient-to-b from-[#20c997]/10 to-white hero-pattern">
+        <div className="container mx-auto p-6 py-20 ">
+          <h1 className="text-4xl font-bold text-center mb-12 flex items-center justify-center gap-3">
+            <HelpCircle size={36} className="text-[#20c997]" />
+            Preguntas Frecuentes
+          </h1>
+          <div className="space-y-4 max-w-4xl mx-auto">
+            {faqData.map((item, index) => (
+              <div key={index} className="border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                <button
+                  onClick={() => toggleAccordion(index)}
+                  className="w-full text-left p-4 bg-gray-50 hover:bg-gray-100 focus:outline-none transition-colors duration-200"
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold text-lg text-gray-800">{item.question}</span>
+                    <span className="text-gray-500">
+                      {openIndex === index ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
+                    </span>
+                  </div>
+                </button>
+                {openIndex === index && (
+                  <div className="p-5 text-gray-700 bg-white border-t border-gray-200">
+                    {item.answer}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

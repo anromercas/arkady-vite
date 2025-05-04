@@ -19,6 +19,7 @@ import instalacion17 from '../assets/galeria/arkadycelebraciones-17.jpeg';
 import instalacion18 from '../assets/galeria/arkadycelebraciones-18.jpeg';
 import instalacion19 from '../assets/galeria/arkadycelebraciones-19.jpeg';
 import instalacion20 from '../assets/galeria/arkadycelebraciones-20.jpeg';
+import Seo from '../seo/Seo';
 
 
 const imagenes = [
@@ -48,40 +49,47 @@ export default function Galeria() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   return (
-    <div className="py-8 px-4 max-w-6xl mx-auto">
-      <h2 className="text-3xl font-bold text-center mb-6">Galería de Instalaciones</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {imagenes.map((imagen, index) => (
-          <div key={index} className="overflow-hidden rounded-lg shadow-lg cursor-pointer" onClick={() => setSelectedImage(imagen)}>
-            <img
-              src={imagen.src}
-              alt={imagen.alt}
-              className="w-full h-56 object-cover hover:scale-105 transition-transform duration-300"
-            />
-          </div>
-        ))}
-      </div>
-
-      {selectedImage && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
-          onClick={() => setSelectedImage(null)}
-        >
-          <div className="relative">
-            <button
-              className="absolute top-2 right-2 text-white text-2xl font-bold"
-              onClick={() => setSelectedImage(null)}
-            >
-              &times;
-            </button>
-            <img
-              src={selectedImage.src}
-              alt={selectedImage.alt}
-              className="max-h-[90vh] max-w-[90vw] rounded-lg shadow-xl"
-            />
-          </div>
+    <>
+      <Seo
+        title="Galería de Fotos | Local de Celebraciones en Sevilla | Arkady"
+        description="Mira cómo son nuestras instalaciones en Sevilla: parque de bolas, zona infantil, cocina y más. Inspírate con nuestra galería de eventos."
+        keywords="galería parque bolas Sevilla, fotos local celebraciones Sevilla, imágenes cumpleaños infantiles, instalaciones Arkady"
+      />
+      <div className="py-8 px-4 max-w-6xl mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-6">Galería de Instalaciones</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {imagenes.map((imagen, index) => (
+            <div key={index} className="overflow-hidden rounded-lg shadow-lg cursor-pointer" onClick={() => setSelectedImage(imagen)}>
+              <img
+                src={imagen.src}
+                alt={imagen.alt}
+                className="w-full h-56 object-cover hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+          ))}
         </div>
-      )}
-    </div>
+
+        {selectedImage && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
+            onClick={() => setSelectedImage(null)}
+          >
+            <div className="relative">
+              <button
+                className="absolute top-2 right-2 text-white text-2xl font-bold"
+                onClick={() => setSelectedImage(null)}
+              >
+                &times;
+              </button>
+              <img
+                src={selectedImage.src}
+                alt={selectedImage.alt}
+                className="max-h-[90vh] max-w-[90vw] rounded-lg shadow-xl"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 }
