@@ -1,9 +1,9 @@
-import React from 'react';
 import { HashRouter as Router } from 'react-router-dom';
 import MainRoutes from './routes/MainRoutes';
 import ScrollToTop from './components/ScrollToTop';
 import CookieConsent from "react-cookie-consent";
 import { HelmetProvider } from 'react-helmet-async';
+import Analytics from './components/Analytics';
 
 function App() {
   return (
@@ -25,6 +25,7 @@ function App() {
         </CookieConsent>
 
         <HelmetProvider>
+          <Analytics />
           <MainRoutes />
         </HelmetProvider>
       </div>
