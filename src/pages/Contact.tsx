@@ -179,9 +179,10 @@ function Contact() {
                       required
                     ></textarea>
                   </div>
-                  <Button type="submit" className="w-full bg-[#20c997] hover:bg-[#1ba884] text-white">
+                  <button type="submit"
+                    className="w-full text-center mt-5 bg-[#20c997] hover:bg-[#1ba884] text-white font-bold py-3 px-8 rounded-full shadow-md transition-colors">
                     Enviar Mensaje
-                  </Button>
+                  </button>
                 </form>
                 <ToastContainer position="top-right" autoClose={3000} />
               </div>
