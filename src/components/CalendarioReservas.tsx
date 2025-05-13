@@ -187,11 +187,19 @@ export default function CalendarioReservas() {
     // NIE: X/Y/Z + 7 dígitos + letra
     // NIF (jurídico): K/L/M + 7 dígitos + letra o dígito
     // Validación de DNI / NIE / NIF / Pasaporte
-    const idRegex = /^([XYZ]\d{7}[A-Z]|\d{8}[A-Z]|[KLM]\d{7}[A-J0-9]|[A-Z]\d{7}[A-Z]|[A-Z]{2}\d{7,8})$/i;
+    const idRegex = /^([XYZ]\d{7}[A-Z]|\d{8}[A-Z]|[KLM]\d{7}[A-J0-9])$/i;
+    const pasaporteExtranjeroRegex = /^[A-Z]{2,}[0-9A-Z]{5,}$/i; // al menos 2 letras + mezcla
+
     if (!formData.dni.trim()) {
-      nuevosErrores.dni = 'El DNI/NIE/NIF/Pasaporte es obligatorio';
-    } else if (!idRegex.test(formData.dni.toUpperCase())) {
-      nuevosErrores.dni = 'El formato del DNI/NIE/NIF/Pasaporte es inválido';
+      nuevosErrores.dni = 'El documento de identidad es obligatorio';
+    } else {
+      const documento = formData.dni.toUpperCase();
+
+      if (pasaporteExtranjeroRegex.test(documento)) {
+        // 👉 Parece pasaporte extranjero → NO validamos
+      } else if (!idRegex.test(documento)) {
+        nuevosErrores.dni = 'Formato de DNI/NIE/NIF inválido';
+      }
     }
 
     // Validación de teléfono (9 dígitos)
@@ -514,7 +522,7 @@ export default function CalendarioReservas() {
               <p className="text-red-500 text-sm">{errors.aceptaNormas}</p>
             )}
 
-            <label className="flex items-center mt-4">
+            {/* <label className="flex items-center mt-4">
               <input
                 type="checkbox"
                 name="palomitero"
@@ -538,7 +546,7 @@ export default function CalendarioReservas() {
               <span>
                 Añadir <strong>Máquina de Algodón de Azúcar</strong> (+10€)
               </span>
-            </label>
+            </label> */}
             <button
               type="button"
               className="w-full text-center mt-5 bg-[#20c997] hover:bg-[#1ba884] text-white font-bold py-3 px-8 rounded-full shadow-md transition-colors"
