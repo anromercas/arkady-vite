@@ -2,6 +2,8 @@ import React from 'react';
 import Services from './Services';
 import { Link } from 'react-router-dom';
 import Seo from '../seo/Seo';
+import bgImage from '../assets/arkady-celebraciones-home.avif';
+
 
 function Home() {
   return (
@@ -9,14 +11,14 @@ function Home() {
       <div className="pt-20">
         {/* Hero Section */}
         <header className="relative h-screen">
-          <div
+            <div
             className="absolute inset-0 bg-cover bg-center z-0"
             style={{
-              backgroundImage: "url('https://images.unsplash.com/photo-1551966775-a4ddc8df052b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+              backgroundImage: `url(${bgImage})`,
             }}
-          >
+            >
             <div className="absolute inset-0 bg-black/50"></div>
-          </div>
+            </div>
 
           <div className="relative z-10 container mx-auto px-6 h-[calc(100vh-80px)] flex items-center">
             <div className="max-w-2xl">
