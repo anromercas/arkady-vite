@@ -38,8 +38,7 @@ function Packs() {
                   <li className='flex items-start'>
                     <Euro className='h-5 w-5 text-[#20c997] mr-2' />
                     <span><b>Precio:</b><br />
-                      <b>Lunes a Jueves:</b> 85 €<br />
-                      <b>Viernes a Domingos, Festivos y Vísperas de Festivos:</b> 100 €
+                      <b>Lunes a Viernes y Vísperas de Festivos:</b> 85 €<br />
                     </span>
                   </li>
                   <li className='flex items-center'>
@@ -75,7 +74,8 @@ function Packs() {
                     <Euro className='h-5 w-5 text-white mr-2' />
                     <span><b>Precio:</b><br />
                       <b>Lunes a Jueves:</b> 140 €<br />
-                      <b>Viernes a Domingos, Festivos y Vísperas de Festivos:</b> 200 €
+                      <b>Viernes y Vísperas de Festivos:</b> 180 € <br />
+                      <b>Sábados, Domingos y Festivos:</b> 200 €
                     </span>
                   </li>
                   <li className='flex items-center'>
@@ -111,7 +111,7 @@ function Packs() {
                     <Euro className='h-5 w-5 text-[#20c997] mr-2' />
                     <span><b>Precio:</b><br />
                       <b>Lunes a Jueves:</b> 85 €<br />
-                      <b>Viernes a Domingos, Festivos y Vísperas de Festivos:</b> 130 €
+                      <b>Viernes y Vísperas de Festivos:</b> 130 €
                     </span>
                   </li>
                   <li className='flex items-center'>
@@ -178,7 +178,7 @@ function Packs() {
         </section>
 
         {/* Servicios Adicionales */}
-        <section className='py-20 bg-white'>
+        {/* <section className='py-20 bg-white'>
           <div className='container mx-auto px-6'>
             <h2 className='text-4xl font-bold text-center mb-8 text-gray-800'>Servicios Adicionales</h2>
             <div className='grid md:grid-cols-2 gap-8 max-w-2xl mx-auto'>
@@ -198,7 +198,7 @@ function Packs() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
       </div>
     </>
   );

@@ -6,8 +6,6 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { CreditCard } from 'lucide-react';
-
 
 interface Reserva {
   nombre: string;
@@ -155,6 +153,62 @@ export default function CalendarioReservas() {
       tramoHorario: tramo,
     });
   };
+
+  // Funciones para calcular festivos móviles
+  function calculateEaster(year: number): Date {
+    const a = year % 19;
+    const b = Math.floor(year / 100);
+    const c = year % 100;
+    const d = Math.floor(b / 4);
+    const e = b % 4;
+    const f = Math.floor((b + 8) / 25);
+    const g = Math.floor((b - f + 1) / 3);
+    const h = (19 * a + b - d - g + 15) % 30;
+    const i = Math.floor(c / 4);
+    const k = c % 4;
+    const L = (32 + 2 * e + 2 * i - h - k) % 7;
+    const m = Math.floor((a + 11 * h + 22 * L) / 451);
+    const month = Math.floor((h + L - 7 * m + 114) / 31);
+    const day = ((h + L - 7 * m + 114) % 31) + 1;
+    return new Date(year, month - 1, day);
+  }
+
+  function addDaysAndFormat(dateObj: Date, days: number): string {
+    const d = new Date(dateObj);
+    d.setDate(d.getDate() + days);
+    const y = d.getFullYear();
+    const m = ('0' + (d.getMonth() + 1)).slice(-2);
+    const dd = ('0' + d.getDate()).slice(-2);
+    return `${y}-${m}-${dd}`;
+  }
+
+  function calculateCorpusDate(year: number): string {
+    return addDaysAndFormat(calculateEaster(year), 60);
+  }
+
+  function calculateFeriaDate(year: number): string {
+    const d = calculateEaster(year);
+    d.setDate(d.getDate() + 14);
+    while (d.getDay() !== 3) {
+      d.setDate(d.getDate() + 1);
+    }
+    return addDaysAndFormat(d, 0);
+  }
+
+  function generateHolidays(year: number): string[] {
+    const y = String(year);
+    const fixed = [
+      `${y}-01-01`, `${y}-01-06`, `${y}-05-01`, `${y}-08-15`,
+      `${y}-10-12`, `${y}-11-01`, `${y}-12-06`, `${y}-12-08`, `${y}-12-25`, `${y}-02-28`
+    ];
+    const easter = calculateEaster(year);
+    const holyThursday = addDaysAndFormat(easter, -3);
+    const goodFriday = addDaysAndFormat(easter, -2);
+    const corpus = calculateCorpusDate(year);
+    const feria = calculateFeriaDate(year);
+
+    return fixed.concat([holyThursday, goodFriday, corpus, feria]).sort();
+  }
 
   const validarFormulario = () => {
     const nuevosErrores: Record<string, string> = {};
@@ -353,36 +407,54 @@ export default function CalendarioReservas() {
 
   const dayStatus = fechaSeleccionada ? getDayStatus(fechaSeleccionada) : 'libre';
 
-  // const availableSlots = tramosHorarios.filter((tramo) => {
-  //   // Si el día está parcialmente ocupado, no mostramos el tramo completo
-  //   if (dayStatus === 'parcial' && tramo.label === '10:00 - 22:00') {
-  //     return false;
-  //   }
-  //   return !isSlotReserved(tramo.label, reservedSlots);
-  // });
+  // Determinar si es fin de semana o festivo
+  const yearSel = fechaSeleccionada?.getFullYear();
+  const holidays = yearSel ? generateHolidays(yearSel) : [];
+  const keySel = fechaSeleccionada ? formatDateKey(fechaSeleccionada) : '';
+  const isWeekend = fechaSeleccionada ? [0, 6].includes(fechaSeleccionada.getDay()) : false;
+  const isHoliday = holidays.includes(keySel);
 
-  // Reemplaza tu declaración actual de availableSlots con esto:
+   // Filtrar tramos disponibles
   const availableSlots = tramosHorarios.filter((tramo) => {
-    // Oculta "día completo" si el día está parcialmente ocupado
+    // Si es fin de semana o festivo, solo full day
+    if (isWeekend || isHoliday) {
+      return tramo.label === '10:00 - 22:00' && !isSlotReserved(tramo.label, reservedSlots);
+    }
+    // Si día parcial ocultar full day
     if (dayStatus === 'parcial' && tramo.label === '10:00 - 22:00') {
       return false;
     }
-
-    // Determina si es horario de verano para la fecha seleccionada
-    const verano = fechaSeleccionada ? isDaylightSavingTime(fechaSeleccionada) : false;
-
-    // Lógica para filtrar horarios según sea verano o invierno
-    if (verano) {
-      // Horario de verano (10:00-22:00, 10:00-15:00 y 18:00-23:00)
-      if (tramo.label === '16:00 - 21:00') return false;
-    } else {
-      // Horario de invierno (10:00-22:00, 10:00-15:00 y 17:00-22:00)
-      if (tramo.label === '17:00 - 22:00') return false;
+    // Filtrado verano/invierno
+    if (fechaSeleccionada) {
+      const verano = isDaylightSavingTime(fechaSeleccionada);
+      if (verano && tramo.label === '16:00 - 21:00') return false;
+      if (!verano && tramo.label === '17:00 - 22:00') return false;
     }
-
-    // Comprobación de si el tramo ya está reservado
     return !isSlotReserved(tramo.label, reservedSlots);
   });
+
+  // Reemplaza tu declaración actual de availableSlots con esto:
+  // const availableSlots = tramosHorarios.filter((tramo) => {
+  //   // Oculta "día completo" si el día está parcialmente ocupado
+  //   if (dayStatus === 'parcial' && tramo.label === '10:00 - 22:00') {
+  //     return false;
+  //   }
+
+  //   // Determina si es horario de verano para la fecha seleccionada
+  //   const verano = fechaSeleccionada ? isDaylightSavingTime(fechaSeleccionada) : false;
+
+  //   // Lógica para filtrar horarios según sea verano o invierno
+  //   if (verano) {
+  //     // Horario de verano (10:00-22:00, 10:00-15:00 y 18:00-23:00)
+  //     if (tramo.label === '16:00 - 21:00') return false;
+  //   } else {
+  //     // Horario de invierno (10:00-22:00, 10:00-15:00 y 17:00-22:00)
+  //     if (tramo.label === '17:00 - 22:00') return false;
+  //   }
+
+  //   // Comprobación de si el tramo ya está reservado
+  //   return !isSlotReserved(tramo.label, reservedSlots);
+  // });
 
   // Function to get the last Sunday of a month
   function lastSunday(month: number, year: number): Date {
@@ -474,9 +546,9 @@ export default function CalendarioReservas() {
             {['nombre', 'email', 'dni', 'telefono'].map((field) => (
               <div key={field} className="mb-2">
                 <label className="block">
-                  {field === 'nombre' ? 'Nombre y Apellidos:' 
-                  : field === 'dni'   ? 'DNI/NIE/NIF/Pasaporte:' 
-                  : `${field.charAt(0).toUpperCase() + field.slice(1)}:`}
+                  {field === 'nombre' ? 'Nombre y Apellidos:'
+                    : field === 'dni' ? 'DNI/NIE/NIF/Pasaporte:'
+                      : `${field.charAt(0).toUpperCase() + field.slice(1)}:`}
                 </label>
                 <input
                   type={field === 'email' ? 'email' : 'text'}
@@ -558,7 +630,7 @@ export default function CalendarioReservas() {
 
         </div>
       )}
-      
+
     </div>
   );
 }
