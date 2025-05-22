@@ -70,10 +70,9 @@ export default function NormasUso() {
         <hr className="mt-4 mb-4" />
 
         {/* Section: Servicios Complementarios */}
-        <section className="mb-6">
-          {/* Section heading with icon */}
+        {/* <section className="mb-6">
           <h2 className="text-xl font-semibold flex items-center gap-2">
-            <Wand2 size={24} className="text-[#20c997]" /> {/* Icon */}
+            <Wand2 size={24} className="text-[#20c997]" />
             Servicios Complementarios
           </h2>
           <p className="mb-2 mt-2">Disponemos de dos máquinas opcionales para animar aún más tu celebración:</p>
@@ -92,7 +91,7 @@ export default function NormasUso() {
             <b>Importante:</b> Ambas máquinas deben utilizarse <b>siempre bajo la supervisión de un adulto</b>. Arkady Celebraciones no se hace responsable de daños ocasionados por su mal uso.
             <br /> En caso de incumplimiento de normas y daños, se perderá la fianza y el cliente deberá abonar los desperfectos.
           </p>
-        </section>
+        </section> */}
 
         {/* Divider */}
         <hr className="mt-4 mb-4" />
