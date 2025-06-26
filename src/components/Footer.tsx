@@ -38,7 +38,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/packs"
+                  to="/tipos-de-reservas"
                   className="text-gray-400 hover:text-[#20c997]"
                 >
                   Tipos de reservas

@@ -10,6 +10,7 @@ import FAQPage from '../pages/FAQ';
 import PoliticaPrivacidad from '../pages/PoliticaPrivacidad';
 import PoliticaCookies from '../pages/PoliticaCookies';
 import Galeria from '../pages/Galeria';
+import BirthdayPage from '../pages/Birthday';
 
 function MainRoutes() {
     return (
@@ -18,7 +19,8 @@ function MainRoutes() {
                 <Route element={<Layout />}>
                     <Route path="/" element={<Home />} />
                     <Route path="/servicios" element={<Services />} />
-                    <Route path="/packs" element={<Packs />} />
+                    <Route path="/servicios/cumpleanos" element={<BirthdayPage />} />
+                    <Route path="/tipos-de-reservas" element={<Packs />} />
                     <Route path="/reservas" element={<Reservations />} />
                     <Route path="/contacto" element={<Contact />} />
                     <Route path="/faq" element={<FAQPage />} />

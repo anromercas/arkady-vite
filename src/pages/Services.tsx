@@ -1,6 +1,7 @@
 import React from 'react';
-import { Cake, Cross, Drama, UsersRound, Baby, GraduationCap } from 'lucide-react';
+import { Cake, Cross, Drama, UsersRound, Baby, GraduationCap, ArrowRight, ChevronRight } from 'lucide-react';
 import Seo from '../seo/Seo';
+import { Link } from 'react-router-dom';
 
 function Services() {
   return (
@@ -32,6 +33,13 @@ function Services() {
                   < br />
                   Un espacio lleno de juegos, alegría y emoción, donde los peques podrán disfrutar de todas las atracciones del parque acompañados de amigos y familiares.
                 </p>
+                <Link
+                    to='/servicios/cumpleanos'
+                    className="inline-block bg-[#20c997] hover:bg-white text-white hover:text-[#20c997] font-bold py-3 px-8 rounded-full shadow-md transition-colors mt-5"
+                >
+                    Ver más detalles 
+                    <ChevronRight className="ml-2 h-5 w-5" />
+                </Link>
               </div>
               <div className="text-center p-6 rounded-lg bg-white shadow-lg hover:shadow-xl transition-shadow">
                 <div className="bg-[#20c997]/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -93,7 +101,7 @@ function Services() {
                 </p>
               </div>
             </div>
-            <div className="text-center mb-16 mt-20">
+            <div className="text-center mb-5 mt-20">
               <p className="text-gray-600 max-w-2xl mx-auto mb-4">
                 En <b>Arkady Celebraciones</b> nos volcamos en que cada evento sea una experiencia única, fácil de organizar y ¡difícil de olvidar!
               </p>

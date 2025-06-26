@@ -22,7 +22,7 @@ function Navbar() {
           <div className="hidden md:flex space-x-8">
             <NavLink to="/" className={linkClass}>Inicio</NavLink>
             <NavLink to="/servicios" className={linkClass}>Servicios</NavLink>
-            <NavLink to="/packs" className={linkClass}>Tipos de reservas</NavLink>
+            <NavLink to="/tipos-de-reservas" className={linkClass}>Tipos de reservas</NavLink>
             <NavLink to="/reservas" className={linkClass}>Reservas</NavLink>
             <NavLink to="/contacto" className={linkClass}>Contacto</NavLink>
             <NavLink to="/faq" className={linkClass}>FAQ</NavLink>
@@ -40,7 +40,7 @@ function Navbar() {
           <div className="md:hidden mt-4 space-y-2 flex flex-col items-start">
             <NavLink to="/" className={linkClass} onClick={() => setIsOpen(false)}>Inicio</NavLink>
             <NavLink to="/servicios" className={linkClass} onClick={() => setIsOpen(false)}>Servicios</NavLink>
-            <NavLink to="/packs" className={linkClass} onClick={() => setIsOpen(false)}>Tipos de reservas</NavLink>
+            <NavLink to="/tipos-de-reservas" className={linkClass} onClick={() => setIsOpen(false)}>Tipos de reservas</NavLink>
             <NavLink to="/reservas" className={linkClass} onClick={() => setIsOpen(false)}>Reservas</NavLink>
             <NavLink to="/contacto" className={linkClass} onClick={() => setIsOpen(false)}>Contacto</NavLink>
             <NavLink to="/faq" className={linkClass} onClick={() => setIsOpen(false)}>FAQ</NavLink>
