@@ -197,18 +197,61 @@ export default function CalendarioReservas() {
 
   function generateHolidays(year: number): string[] {
     const y = String(year);
-    const fixed = [
-      `${y}-01-01`, `${y}-01-06`, `${y}-05-01`, `${y}-08-15`,
-      `${y}-10-12`, `${y}-11-01`, `${y}-12-06`, `${y}-12-08`, `${y}-12-25`, `${y}-02-28`
-    ];
-    const easter = calculateEaster(year);
-    const holyThursday = addDaysAndFormat(easter, -3);
-    const goodFriday = addDaysAndFormat(easter, -2);
-    const corpus = calculateCorpusDate(year);
-    const feria = calculateFeriaDate(year);
 
-    return fixed.concat([holyThursday, goodFriday, corpus, feria]).sort();
+    // 1) Festivos fijos
+    const fixed = [
+      `${y}-01-01`, // Año Nuevo
+      `${y}-01-06`, // Reyes Magos
+      `${y}-02-28`, // Día de Andalucía
+      `${y}-05-01`, // Día del Trabajo
+      `${y}-08-15`, // Asunción
+      `${y}-10-12`, // Hispanidad
+      `${y}-11-01`, // Todos los Santos
+      `${y}-12-06`, // Constitución
+      `${y}-12-08`, // Inmaculada
+      `${y}-12-25`, // Navidad
+    ];
+
+    // 2) Festivos movibles basados en Pascua
+    const easter = calculateEaster(year);
+    const movibles = [
+      addDaysAndFormat(easter, -3),        // Jueves Santo
+      addDaysAndFormat(easter, -2),        // Viernes Santo
+      calculateCorpusDate(year),           // Corpus Christi
+      calculateFeriaDate(year),            // Feria de Abril
+    ];
+
+    // 3) Creamos el listado completo y “observamos” los que caen en domingo
+    const all = [...fixed, ...movibles];
+    const observed = all.reduce<string[]>((acc, dateStr) => {
+      const d = new Date(dateStr);
+      if (d.getDay() === 0) {
+        // Si cae en domingo, lo trasladamos a lunes
+        acc.push(addDaysAndFormat(d, 1));
+      } else {
+        acc.push(dateStr);
+      }
+      return acc;
+    }, []);
+
+    // 4) Devolvemos cronológicamente ordenado
+    return observed.sort();
   }
+
+  // function generateHolidays(year: number): string[] {
+  //   const y = String(year);
+  //   const fixed = [
+  //     `${y}-01-01`, `${y}-01-06`, `${y}-05-01`, `${y}-08-15`,
+  //     `${y}-10-12`, `${y}-11-01`, `${y}-12-06`, `${y}-12-08`, `${y}-12-25`, `${y}-02-28`
+  //   ];
+  //   const easter = calculateEaster(year);
+  //   const holyThursday = addDaysAndFormat(easter, -3);
+  //   const goodFriday = addDaysAndFormat(easter, -2);
+  //   const corpus = calculateCorpusDate(year);
+  //   const feria = calculateFeriaDate(year);
+
+  //   return fixed.concat([holyThursday, goodFriday, corpus, feria]).sort();
+  // }
 
   const validarFormulario = () => {
     const nuevosErrores: Record<string, string> = {};
@@ -414,7 +457,7 @@ export default function CalendarioReservas() {
   const isWeekend = fechaSeleccionada ? [0, 6].includes(fechaSeleccionada.getDay()) : false;
   const isHoliday = holidays.includes(keySel);
 
-   // Filtrar tramos disponibles
+  // Filtrar tramos disponibles
   const availableSlots = tramosHorarios.filter((tramo) => {
     // Si es fin de semana o festivo, solo full day
     if (isWeekend || isHoliday) {
