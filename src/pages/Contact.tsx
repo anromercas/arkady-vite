@@ -51,8 +51,8 @@ function Contact() {
   return (
     <>
       <Seo
-        title="Contacto | Arkady Celebraciones en Sevilla"
-        description="¿Tienes dudas o quieres más información? Contacta con Arkady en Sevilla. Estamos encantados de ayudarte a organizar tu celebración."
+        title="Contacto | Local para celebraciones en Sevilla – Arkady"
+        description="¿Tienes dudas? Escríbenos o llámanos. Estamos en Cerro del Águila, Sevilla. También puedes encontrarnos en Instagram, Facebook y TikTok."
         keywords="contacto Arkady Sevilla, información celebraciones, teléfono parque de bolas Sevilla, email local cumpleaños"
       />
       <div className="pt-20">

@@ -9,8 +9,8 @@ function Reservations() {
   return (
     <>
       <Seo
-        title="Reserva tu local para celebraciones en Sevilla | Arkady"
-        description="Reserva online tu espacio en Arkady para cumpleaños, comuniones y eventos familiares en Sevilla. Elige horario y asegura tu fecha hoy mismo."
+        title="Reserva tu local de celebraciones en Sevilla online"
+        description="Elige fecha, tramo horario y asegura tu celebración en segundos. Reserva online tu cumpleaños, comunión o evento temático en nuestro local privado."
         keywords="reserva local celebraciones Sevilla, alquilar parque de bolas Sevilla, cumpleaños infantiles Sevilla, comuniones Sevilla"
       />
     // Main container with top padding

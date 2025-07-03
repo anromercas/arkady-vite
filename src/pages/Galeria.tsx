@@ -27,8 +27,6 @@ import instalacion25 from '../assets/galeria/arkadycelebraciones-25.jpeg';
 import instalacion26 from '../assets/galeria/arkadycelebraciones-26.jpeg';
 import instalacion27 from '../assets/galeria/arkadycelebraciones-27.jpeg';
 import instalacion28 from '../assets/galeria/arkadycelebraciones-28.jpeg';
-import instalacion29 from '../assets/galeria/arkadycelebraciones-29.jpeg';
-import instalacion30 from '../assets/galeria/arkadycelebraciones-30.jpeg';
 import Seo from '../seo/Seo';
 
 import {
@@ -98,9 +96,9 @@ export default function Galeria() {
   return (
     <>
       <Seo
-        title="Galería de Fotos | Local de Celebraciones en Sevilla | Arkady"
-        description="Mira cómo son nuestras instalaciones en Sevilla: parque de bolas, zona infantil, cocina y más. Inspírate con nuestra galería de eventos."
-        keywords="galería parque bolas Sevilla, fotos local celebraciones Sevilla, imágenes cumpleaños infantiles, instalaciones Arkady"
+        title="Galería de local de celebraciones en Sevilla | Arkady"
+        description="Mira cómo son nuestras instalaciones en Sevilla: parque de bolas, zona infantil, cocina y más. Imagina como se vería tu próximo evento"
+        keywords="galería local celebraciones Sevilla, fotos local celebraciones Sevilla, imágenes cumpleaños infantiles, instalaciones Arkady"
       />
 
       <div className="py-8 px-4 max-w-6xl mx-auto">

@@ -67,7 +67,7 @@ function Home() {
           <div className="relative z-10 container mx-auto px-6 h-[calc(100vh-80px)] flex items-center">
             <div className="max-w-2xl">
               <h1 className='text-l md:text-l font-bold text-white mb-6'>
-                Local de celebraciones en Sevilla
+                Local celebraciones Sevilla
               </h1>
               <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
                 Crea Recuerdos Inolvidables en Arkady
@@ -152,9 +152,9 @@ function Home() {
 
       </div>
       <Seo
-        title={'Local de celebraciones en Sevilla | Arkady celebraciones'}
+        title={'Local celebraciones Sevilla | Arkady celebraciones'}
         description={'Alquila un local con parque de bolas, cocina equipada y zona infantil para cumpleaños y fiestas en Sevilla. Reserva online fácil y rápida.'}
-        keywords={'local de celebraciones en sevilla, parque de bolas Sevilla, cumpleaños Sevilla, cumpleaños infantil, comuniones Sevilla'}
+        keywords={'local celebraciones sevilla, parque de bolas Sevilla, cumpleaños Sevilla, cumpleaños infantil Sevilla, comuniones Sevilla'}
       />
     </>
   );
