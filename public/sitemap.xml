@@ -28,4 +28,8 @@
     <loc>https://arkadycelebraciones.es/#/faq</loc>
     <priority>0.5</priority>
   </url>
+  <url>
+    <loc>https://arkadycelebraciones.es/#/sobre-nosotros</loc>
+    <priority>0.5</priority>
+  </url>
 </urlset>

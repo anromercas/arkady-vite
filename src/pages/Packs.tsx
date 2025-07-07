@@ -7,9 +7,9 @@ function Packs() {
   return (
     <>
       <Seo
-        title="Tipos de Reserva y Tarifas | Arkady Celebraciones Sevilla"
-        description="Consulta los diferentes horarios y precios de nuestras reservas en Arkady: turno mañana, tarde o día completo. Celebraciones a tu medida."
-        keywords="tipos de reserva Arkady, precios celebraciones Sevilla, local cumpleaños tarifas, horarios parque bolas Sevilla"
+        title="Reserva tu local de celebraciones en Sevilla por horas"
+        description="Consulta los tipos de reserva: mañana, tarde o día completo. Espacio exclusivo para hasta 60 personas en Sevilla. Desde solo 85 €. ¡Fácil y rápido!"
+        keywords="Horarios y Tarifas Arkady, precios local celebraciones Sevilla, local cumpleaños tarifas, horarios parque bolas Sevilla"
       />
       <div className='pt-20'>
         {/* Tipos de Reserva */}
@@ -85,7 +85,7 @@ function Packs() {
                 </ul>
                 <Link
                   to='/reservas'
-                  className='inline-block w-full text-center bg-white hover:bg-[#1ba884] text-[#20c997] font-bold py-3 px-8 rounded-full shadow-md transition-colors'
+                  className='inline-block w-full text-center bg-white hover:bg-[#1ba884] hover:text-white text-[#20c997] font-bold py-3 px-8 rounded-full shadow-md transition-colors'
                 >
                   Reservar Día Completo
                 </Link>

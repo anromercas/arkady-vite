@@ -275,7 +275,7 @@ export default function FAQPage() {
     <>
       <Seo
         title="Preguntas Frecuentes | Arkady Celebraciones Sevilla"
-        description="Resolvemos tus dudas frecuentes sobre reservas, normas, servicios, horarios y pagos. Todo lo que necesitas saber sobre Arkady."
+        description="Resolvemos todas tus dudas sobre horarios, precios, normas, capacidad, acceso y condiciones del local de celebraciones más completo de Sevilla."
         keywords="preguntas frecuentes Arkady, dudas alquiler sala Sevilla, normas uso parque de bolas, reserva local fiestas Sevilla"
       />
       <div className="pt-20 bg-gradient-to-b from-[#20c997]/10 to-white hero-pattern">

@@ -27,6 +27,7 @@ function Navbar() {
             <NavLink to="/contacto" className={linkClass}>Contacto</NavLink>
             <NavLink to="/faq" className={linkClass}>FAQ</NavLink>
             <NavLink to="/galeria" className={linkClass}>Galería</NavLink>
+            <NavLink to="/sobre-nosotros" className={linkClass}>Sobre Nosotros</NavLink>
           </div>
 
           <div className="md:hidden">
@@ -45,6 +46,7 @@ function Navbar() {
             <NavLink to="/contacto" className={linkClass} onClick={() => setIsOpen(false)}>Contacto</NavLink>
             <NavLink to="/faq" className={linkClass} onClick={() => setIsOpen(false)}>FAQ</NavLink>
             <NavLink to="/galeria" className={linkClass} onClick={() => setIsOpen(false)}>Galería</NavLink>
+            <NavLink to="/sobre-nosotros" className={linkClass} onClick={() => setIsOpen(false)}>Sobre Nosoros</NavLink>
           </div>
         )}
       </div>

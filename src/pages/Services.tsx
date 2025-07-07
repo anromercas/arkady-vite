@@ -6,7 +6,7 @@ function Services() {
   return (
     <>
       <Seo
-        title="Servicios de Celebración en Sevilla | Parque de Bolas, Cocina, Zona Gamer"
+        title="Servicios del mejor local para celebraciones en Sevilla"
         description="Descubre todos los servicios de Arkady: parque de bolas, cocina equipada, zona gamer, futbolín, zona infantil y más. Ideal para todas las edades."
         keywords="servicios cumpleaños Sevilla, parque bolas Sevilla, cocina equipada, zona infantil, futbolín Sevilla, alquiler local fiestas"
       />

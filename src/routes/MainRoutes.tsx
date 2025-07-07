@@ -10,6 +10,7 @@ import FAQPage from '../pages/FAQ';
 import PoliticaPrivacidad from '../pages/PoliticaPrivacidad';
 import PoliticaCookies from '../pages/PoliticaCookies';
 import Galeria from '../pages/Galeria';
+import About from '../pages/About';
 
 function MainRoutes() {
     return (
@@ -23,6 +24,7 @@ function MainRoutes() {
                     <Route path="/contacto" element={<Contact />} />
                     <Route path="/faq" element={<FAQPage />} />
                     <Route path="/galeria" element={<Galeria />} />
+                    <Route path="/sobre-nosotros" element={<About />} />
                     <Route path="/normas-uso" element={<NormasUso />} />
                     <Route path="/politica-privacidad" element={<PoliticaPrivacidad />} />
                     <Route path="/politica-cookies" element={<PoliticaCookies />} />
