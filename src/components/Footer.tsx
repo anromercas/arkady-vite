@@ -92,6 +92,14 @@ function Footer() {
                   Cookies
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/sobre-nosotros"
+                  className="text-gray-400 hover:text-[#20c997]"
+                >
+                  Sobre Nosotros
+                </Link>
+              </li>
             </ul>
           </div>
           <div>

@@ -85,7 +85,7 @@ function Packs() {
                 </ul>
                 <Link
                   to='/reservas'
-                  className='inline-block w-full text-center bg-white hover:bg-[#1ba884] text-[#20c997] font-bold py-3 px-8 rounded-full shadow-md transition-colors'
+                  className='inline-block w-full text-center bg-white hover:bg-[#1ba884] hover:text-white text-[#20c997] font-bold py-3 px-8 rounded-full shadow-md transition-colors'
                 >
                   Reservar Día Completo
                 </Link>
