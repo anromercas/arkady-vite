@@ -17,7 +17,23 @@ interface Reserva {
   aceptaNormas: boolean;
   palomitero: boolean;
   algodonAzucar: boolean;
+  codigoPromocional?: string;
 }
+
+interface Promotion {
+  start: string;
+  end: string;
+  promotionCode: string;
+  percentage: number;
+  days: string; // p.ej. "lun-jue" o "Sab-dom-fest"
+  tramoHorario: string;
+}
+
+interface ValidationResult {
+  valid: boolean;
+  promoValida?: Promotion;
+}
+
 // Configura Moment.js para que use español y que la semana empiece el lunes
 moment.locale('es');
 moment.updateLocale('es', {
@@ -36,19 +52,21 @@ const formats = {
 };
 
 const tramosHorarios = [
-  { label: '10:00 - 22:00', startHour: 10, endHour: 22 },
-  { label: '10:00 - 15:00', startHour: 10, endHour: 15 },
-  { label: '16:00 - 21:00', startHour: 17, endHour: 22 },
-  { label: '17:00 - 22:00', startHour: 18, endHour: 23 },
+  { label: '10:00 - 22:00', type: 'dia completo' },
+  { label: '10:00 - 15:00', type: 'mañana' },
+  { label: '16:00 - 21:00', type: 'tarde' },
+  { label: '17:00 - 22:00', type: 'tarde' },
 ];
 
 // Endpoint para obtener reservas
-// const RESERVAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwclDYmwMtZjlUHk070xsrMpHCfKo_0fKE8neNy3mHgB_ztJvstlKtn06xNJ-JVP8Y2/exec';
-const RESERVAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbw0b2KgTQpYaob_e0fU2IS5fgu0pY14zBMvpEOaoz-LNoM8PipJ0QpLqk5XztpKJ-KgGw/exec';
+// const RESERVAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwclDYmwMtZjlUHk070xsrMpHCfKo_0fKE8neNy3mHgB_ztJvstlKtn06xNJ-JVP8Y2/exec'; // Nuria
+const RESERVAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbw0b2KgTQpYaob_e0fU2IS5fgu0pY14zBMvpEOaoz-LNoM8PipJ0QpLqk5XztpKJ-KgGw/exec'; // Arkady producción
 
 export default function CalendarioReservas() {
   const [fechaSeleccionada, setFechaSeleccionada] = useState<Date | null>(null);
   const [tramoSeleccionado, setTramoSeleccionado] = useState<string | null>(null);
+  const [promotionsData, setPromotionsData] = useState<Promotion[]>([]);
+  const [selectedPromo, setSelectedPromo] = useState<Promotion | null>(null);
   const [formData, setFormData] = useState<Reserva>({
     nombre: '',
     email: '',
@@ -59,6 +77,7 @@ export default function CalendarioReservas() {
     aceptaNormas: false,
     palomitero: false,
     algodonAzucar: false,
+    codigoPromocional: ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [reservasData, setReservasData] = useState<Reserva[]>([]);
@@ -77,6 +96,7 @@ export default function CalendarioReservas() {
       const data = await response.json();
       const raw: Reserva[] = data.raw || [];
       setReservasData(raw);
+      setPromotionsData(data.promotions || []);
     } catch (err: any) {
       console.error(err);
       toast.error(err.message);
@@ -88,6 +108,161 @@ export default function CalendarioReservas() {
   useEffect(() => {
     fetchReservas();
   }, [fetchReservas]);
+
+  /**
+ * Devuelve el objeto Promotion válido para un código y fecha dados,
+ * o null si no hay ninguno.
+ */
+  const getValidPromotion = (
+    code: string,
+    date: Date,
+    tramoType: string
+  ): Promotion | null => {
+    const codeUp = code.trim().toUpperCase();
+
+    // 1) Filtra sólo las promos con ese código
+    const byCode = promotionsData.filter(
+      p => p.promotionCode.toUpperCase() === codeUp
+    );
+    if (byCode.length === 0) {
+      throw new Error('INVALID_CODE');
+    }
+
+    // 2) De esas, las que sean para este tramo o para "todos"
+    const byTramo = byCode.filter(
+      p => p.tramoHorario === tramoType || p.tramoHorario === 'todos'
+    );
+    if (byTramo.length === 0) {
+      throw new Error('INVALID_TRAMO');
+    }
+
+    // 3) De esas, las que estén en rango de fechas
+    const ts = date.getTime();
+    const inDateRange = byTramo.filter(p => {
+      const start = new Date(p.start).getTime();
+      const end = new Date(p.end).getTime();
+      return ts >= start && ts <= end;
+    });
+    if (inDateRange.length === 0) {
+      throw new Error('INVALID_DATE');
+    }
+
+    // 4) Prioridad según el día de la semana / festivo
+    const normalize = (s: string) =>
+      s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const hasToken = (p: Promotion, token: string) =>
+      normalize(p.days).split('-').includes(token);
+
+    const keyToday = formatDateKey(date);
+    const tomorrow = new Date(date);
+    tomorrow.setDate(date.getDate() + 1);
+    const keyTomorrow = formatDateKey(tomorrow);
+    const holidays = generateHolidays(date.getFullYear());
+    const isFestivo = holidays.includes(keyToday);
+    const isVispFest = holidays.includes(keyTomorrow);
+    const dow = date.getDay(); // 0=dom,1=lun,…,6=sab
+
+    // a) Sábado
+    if (dow === 6) {
+      return inDateRange.find(p => hasToken(p, 'sab')) || null;
+    }
+    // b) Domingo
+    if (dow === 0) {
+      return inDateRange.find(p => hasToken(p, 'dom')) || null;
+    }
+    // c) Festivo
+    if (isFestivo) {
+      return inDateRange.find(p => hasToken(p, 'fest')) || null;
+    }
+    // d) Viernes o víspera de festivo
+    if (dow === 5 || isVispFest) {
+      return (
+        inDateRange.find(p => hasToken(p, 'vie')) ??
+        inDateRange.find(p => hasToken(p, 'visp.fest')) ??
+        null
+      );
+    }
+    // e) Lunes–Jueves (incluye “todos” en days token)
+    return (
+      inDateRange.find(p =>
+        ['lun', 'mar', 'mie', 'jue', 'todos'].some(tok => hasToken(p, tok))
+      ) || null
+    );
+  };
+  // const getValidPromotion = (
+  //   code: string,
+  //   date: Date,
+  //   tramoType: string
+  // ): Promotion | null => {
+  //   const codeUp = code.trim().toUpperCase();
+
+  //   // 1) Filtra sólo las promos con ese código
+  //   const byCode = promotionsData.filter(
+  //     p => p.promotionCode.toUpperCase() === codeUp
+  //   );
+  //   if (byCode.length === 0) {
+  //     throw new Error('INVALID_CODE');
+  //   }
+
+  //   // 2) De esas, las que sean para este tramo (“dia completo” | “mañana” | “tarde”)
+  //   const byTramo = byCode.filter(p => p.tramoHorario === tramoType);
+  //   if (byTramo.length === 0) {
+  //     throw new Error('INVALID_TRAMO');
+  //   }
+
+  //   // 3) De esas, las que estén en rango de fechas
+  //   const ts = date.getTime();
+  //   const inDateRange = byTramo.filter(p => {
+  //     const start = new Date(p.start).getTime();
+  //     const end = new Date(p.end).getTime();
+  //     return ts >= start && ts <= end;
+  //   });
+  //   if (inDateRange.length === 0) {
+  //     throw new Error('INVALID_DATE');
+  //   }
+
+  //   // 4) Prioridad según el día de la semana / festivo
+  //   const normalize = (s: string) =>
+  //     s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  //   const hasToken = (p: Promotion, token: string) =>
+  //     normalize(p.days).split('-').includes(token);
+
+  //   const keyToday = formatDateKey(date);
+  //   const tomorrow = new Date(date);
+  //   tomorrow.setDate(date.getDate() + 1);
+  //   const keyTomorrow = formatDateKey(tomorrow);
+  //   const holidays = generateHolidays(date.getFullYear());
+  //   const isFestivo = holidays.includes(keyToday);
+  //   const isVispFest = holidays.includes(keyTomorrow);
+  //   const dow = date.getDay(); // 0=dom,1=lun,…,6=sab
+
+  //   // a) Sábado
+  //   if (dow === 6) {
+  //     return inDateRange.find(p => hasToken(p, 'sab')) || null;
+  //   }
+  //   // b) Domingo
+  //   if (dow === 0) {
+  //     return inDateRange.find(p => hasToken(p, 'dom')) || null;
+  //   }
+  //   // c) Festivo
+  //   if (isFestivo) {
+  //     return inDateRange.find(p => hasToken(p, 'fest')) || null;
+  //   }
+  //   // d) Viernes o víspera de festivo
+  //   if (dow === 5 || isVispFest) {
+  //     return (
+  //       inDateRange.find(p => hasToken(p, 'vie')) ??
+  //       inDateRange.find(p => hasToken(p, 'visp.fest')) ??
+  //       null
+  //     );
+  //   }
+  //   // e) Lunes–Jueves (incluye “todos”)
+  //   return (
+  //     inDateRange.find(p =>
+  //       ['lun', 'mar', 'mie', 'jue', 'todos'].some(tok => hasToken(p, tok))
+  //     ) || null
+  //   );
+  // };
 
   // Agrupa reservas por día
   const aggregatedMap = reservasData.reduce((acc: { [key: string]: string[] }, reserva) => {
@@ -238,22 +413,7 @@ export default function CalendarioReservas() {
     return observed.sort();
   }
 
-  // function generateHolidays(year: number): string[] {
-  //   const y = String(year);
-  //   const fixed = [
-  //     `${y}-01-01`, `${y}-01-06`, `${y}-05-01`, `${y}-08-15`,
-  //     `${y}-10-12`, `${y}-11-01`, `${y}-12-06`, `${y}-12-08`, `${y}-12-25`, `${y}-02-28`
-  //   ];
-  //   const easter = calculateEaster(year);
-  //   const holyThursday = addDaysAndFormat(easter, -3);
-  //   const goodFriday = addDaysAndFormat(easter, -2);
-  //   const corpus = calculateCorpusDate(year);
-  //   const feria = calculateFeriaDate(year);
-
-  //   return fixed.concat([holyThursday, goodFriday, corpus, feria]).sort();
-  // }
-
-  const validarFormulario = () => {
+  const validarFormulario = (): ValidationResult => {
     const nuevosErrores: Record<string, string> = {};
     if (!formData.nombre.trim())
       nuevosErrores.nombre = 'El nombre es obligatorio';
@@ -307,8 +467,53 @@ export default function CalendarioReservas() {
       nuevosErrores.telefono = 'El formato del teléfono es inválido';
     }
 
+    const selectedTramoObj = tramosHorarios.find(t => t.label === tramoSeleccionado);
+    if (!selectedTramoObj) {
+      nuevosErrores.tramoHorario = 'Selecciona un tramo válido';
+    }
+    const selectedType = selectedTramoObj?.type; // "dia completo" | "mañana" | "tarde"
+
+    const code = formData.codigoPromocional?.trim();
+    if (!code) {
+      setSelectedPromo(null);
+    }
+    let promoValida: Promotion | undefined;
+    if (code) {
+      if (!fechaSeleccionada) {
+        nuevosErrores.codigoPromocional = 'Selecciona la fecha antes de aplicar la promoción';
+      } else if (!tramoSeleccionado) {
+        nuevosErrores.codigoPromocional = 'Selecciona primero un tramo horario';
+      } else {
+        try {
+          const found = getValidPromotion(code, fechaSeleccionada, selectedType!);
+          if (found) {
+            promoValida = found;
+          }
+        } catch (err: any) {
+          switch (err.message) {
+            case 'INVALID_CODE':
+              nuevosErrores.codigoPromocional = 'El código promocional no existe';
+              break;
+            case 'INVALID_TRAMO':
+              nuevosErrores.codigoPromocional = 'El código no aplica a este tramo horario';
+              break;
+            case 'INVALID_DATE':
+              nuevosErrores.codigoPromocional = 'El código no es válido para esa fecha';
+              break;
+          }
+        }
+      }
+    } else {
+      setSelectedPromo(null);
+    }
+
     setErrors(nuevosErrores);
-    return Object.keys(nuevosErrores).length === 0;
+    setSelectedPromo(promoValida || null);
+    return {
+      valid: Object.keys(nuevosErrores).length === 0,
+      promoValida
+    };
+    // return Object.keys(nuevosErrores).length === 0;
   };
 
   const reservarEvento = async () => {
@@ -320,14 +525,15 @@ export default function CalendarioReservas() {
       toast.error('Selecciona un tramo horario antes de reservar.');
       return;
     }
-    if (!validarFormulario()) {
+    const { valid, promoValida } = validarFormulario();
+    if (!valid) {
       toast.error('Por favor, revisa el formulario.');
       return;
     }
 
     try {
       setLoading(true);
-      const result = await agregarReserva(formData);
+      const result = await agregarReserva(formData, promoValida);
       if (result.error !== undefined) {
         toast.error(result.error);
       } else {
@@ -353,24 +559,30 @@ export default function CalendarioReservas() {
       aceptaNormas: false,
       palomitero: false,
       algodonAzucar: false,
+      codigoPromocional: ''
     });
     setFechaSeleccionada(null);
     setTramoSeleccionado(null);
   }
 
-  const agregarReserva = async (reserva: Reserva) => {
+  const agregarReserva = async (reserva: Reserva, promoValida?: Promotion) => {
     try {
+      console.log('reserva ', reserva)
       const params = new URLSearchParams();
       params.append('nombre', reserva.nombre);
       params.append('email', reserva.email);
       params.append('dni', reserva.dni);
       params.append('telefono', reserva.telefono);
+      if (promoValida) {
+        // envía todo el objeto como JSON
+        params.append('promocion', JSON.stringify(promoValida));
+      }
+      // params.append('codigoPromocional', reserva.codigoPromocional ? reserva.codigoPromocional : '');
       params.append('diaSeleccionado', reserva.diaSeleccionado);
       params.append('tramoHorario', reserva.tramoHorario);
       params.append('aceptaNormas', reserva.aceptaNormas ? 'true' : 'false');
       params.append('palomitero', reserva.palomitero ? 'true' : 'false');
       params.append('algodonAzucar', reserva.algodonAzucar ? 'true' : 'false');
-
       params.append('fechaReserva', new Date().toISOString().split('T')[0]);
 
       const response = await fetch(
@@ -476,29 +688,6 @@ export default function CalendarioReservas() {
     return !isSlotReserved(tramo.label, reservedSlots);
   });
 
-  // Reemplaza tu declaración actual de availableSlots con esto:
-  // const availableSlots = tramosHorarios.filter((tramo) => {
-  //   // Oculta "día completo" si el día está parcialmente ocupado
-  //   if (dayStatus === 'parcial' && tramo.label === '10:00 - 22:00') {
-  //     return false;
-  //   }
-
-  //   // Determina si es horario de verano para la fecha seleccionada
-  //   const verano = fechaSeleccionada ? isDaylightSavingTime(fechaSeleccionada) : false;
-
-  //   // Lógica para filtrar horarios según sea verano o invierno
-  //   if (verano) {
-  //     // Horario de verano (10:00-22:00, 10:00-15:00 y 18:00-23:00)
-  //     if (tramo.label === '16:00 - 21:00') return false;
-  //   } else {
-  //     // Horario de invierno (10:00-22:00, 10:00-15:00 y 17:00-22:00)
-  //     if (tramo.label === '17:00 - 22:00') return false;
-  //   }
-
-  //   // Comprobación de si el tramo ya está reservado
-  //   return !isSlotReserved(tramo.label, reservedSlots);
-  // });
-
   // Function to get the last Sunday of a month
   function lastSunday(month: number, year: number): Date {
     const lastDay = new Date(year, month + 1, 0);
@@ -586,12 +775,13 @@ export default function CalendarioReservas() {
           </div>
 
           <form className="mt-6 max-w-lg mx-auto text-left">
-            {['nombre', 'email', 'dni', 'telefono'].map((field) => (
+            {['nombre', 'email', 'dni', 'telefono', 'codigoPromocional'].map((field) => (
               <div key={field} className="mb-2">
                 <label className="block">
                   {field === 'nombre' ? 'Nombre y Apellidos:'
                     : field === 'dni' ? 'DNI/NIE/NIF/Pasaporte:'
-                      : `${field.charAt(0).toUpperCase() + field.slice(1)}:`}
+                      : field === 'codigoPromocional' ? 'Código Promocional:'
+                        : `${field.charAt(0).toUpperCase() + field.slice(1)}:`}
                 </label>
                 <input
                   type={field === 'email' ? 'email' : 'text'}
