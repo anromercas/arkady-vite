@@ -1,4 +1,4 @@
-import { HashRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import MainRoutes from './routes/MainRoutes';
 import ScrollToTop from './components/ScrollToTop';
 import CookieConsent from "react-cookie-consent";

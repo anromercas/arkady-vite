@@ -5,31 +5,31 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://arkadycelebraciones.es/#/reservas</loc>
+    <loc>https://arkadycelebraciones.es/reservas</loc>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://arkadycelebraciones.es/#/servicios</loc>
+    <loc>https://arkadycelebraciones.es/servicios</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arkadycelebraciones.es/#/packs</loc>
+    <loc>https://arkadycelebraciones.es/packs</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arkadycelebraciones.es/#/contacto</loc>
+    <loc>https://arkadycelebraciones.es/contacto</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://arkadycelebraciones.es/#/galeria</loc>
+    <loc>https://arkadycelebraciones.es/galeria</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://arkadycelebraciones.es/#/faq</loc>
+    <loc>https://arkadycelebraciones.es/faq</loc>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://arkadycelebraciones.es/#/sobre-nosotros</loc>
-    <priority>0.5</priority>
+    <loc>https://arkadycelebraciones.es/sobre-nosotros</loc>
+    <priority>0.8</priority>
   </url>
 </urlset>
