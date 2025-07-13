@@ -1,82 +1,67 @@
 <!doctype html>
-<html lang="en">
-
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" href="public/favicon.ico" />
-  <!-- Google tag (gtag.js) -->
+  <!-- Google Tag -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-KN7QGRJ1C5"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
+    function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
-
     gtag('config', 'G-KN7QGRJ1C5');
   </script>
 
-</head>
-
-<body>
-  <noscript>
-    <script type="application/ld+json">
+  <!-- === JSON-LD estructurado === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "EventVenue",
+    "@id": "https://arkadycelebraciones.es/#venue",
+    "name": "Arkady Celebraciones",
+    "image": "https://arkadycelebraciones.es/assets/favicon-BOuny55K.ico",
+    "url": "https://arkadycelebraciones.es/",
+    "telephone": "+34 655 31 29 18",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "C. Águila Perdicera, 9, Local 5",
+      "addressLocality": "Sevilla",
+      "postalCode": "41006",
+      "addressCountry": "ES"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 37.3660259,
+      "longitude": -5.953907117
+    },
+    "openingHoursSpecification": [
       {
-        "@context": "https://schema.org",
-        "@type": "LocalBusiness",
-        "name": "Arkady Celebraciones",
-        "image": "https://arkadycelebraciones.es/assets/favicon-BOuny55K.ico",
-        "@id": "",
-        "url": "https://arkadycelebraciones.es/",
-        "telephone": "655 31 29 18",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "C. Águila Perdicera, 9, Local 5",
-          "addressLocality": "Sevilla",
-          "postalCode": "41006",
-          "addressCountry": "ES"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": 37.3660259,
-          "longitude": -5.9539071,17
-        },
-        "openingHoursSpecification": [{
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday"
-          ],
-          "opens": "10:00",
-          "closes": "15:00"
-        },{
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday"
-          ],
-          "opens": "17:00",
-          "closes": "22:00"
-        }],
-        "sameAs": [
-          "https://www.facebook.com/people/Arkady-Celebraciones/61574481755699/?rdid=QvvCgq6PALpR6ynK&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F14dFof54WY%2F",
-          "https://www.instagram.com/arkadycelebraciones/?locale=es_ES%2F&hl=bn"
-        ] 
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
+        ],
+        "opens": "10:00",
+        "closes": "15:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
+        ],
+        "opens": "17:00",
+        "closes": "22:00"
       }
-    </script>
-  </noscript>
+    ],
+    "sameAs": [
+      "https://www.facebook.com/arkadycelebraciones",
+      "https://www.instagram.com/arkadycelebraciones"
+    ]
+  }
+  </script>
+  <!-- =========================== -->
+</head>
+<body>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
-
 </html>
