@@ -84,7 +84,7 @@ function Home() {
                   Reservar Ahora
                 </Link>
                 <Link
-                  to="/tipos-de-reservas"
+                  to="/packs"
                   className="inline-block bg-white hover:text-white hover:bg-[#20c997] text-[#20c997] border-white font-bold py-3 px-8 rounded-full shadow-md transition-colors"
                 >
                   Ver Tipos de Reservas
