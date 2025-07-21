@@ -4,8 +4,20 @@ import ScrollToTop from './components/ScrollToTop';
 import CookieConsent from "react-cookie-consent";
 import { HelmetProvider } from 'react-helmet-async';
 import Analytics from './components/Analytics';
+import { useEffect } from 'react';
 
 function App() {
+  // Disparar evento de renderizado para SSG
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const timer = setTimeout(() => {
+        window.dispatchEvent(new Event('render-event'));
+      }, 1000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   return (
     <Router>
       <ScrollToTop />
