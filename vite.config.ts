@@ -3,8 +3,8 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 
 export default defineConfig({
-  base: 'https://arkadycelebraciones.es',
-  // base: './',
+  // base: 'https://arkadycelebraciones.es',
+  base: './',
   plugins: [react()],
   ssr: {
     noExternal: [
