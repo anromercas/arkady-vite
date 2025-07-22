@@ -10,26 +10,6 @@ export default defineConfig({
     vike({
       prerender: true
     })
-    prerender({
-      routes: [
-        '/',
-        '/servicios',
-        '/packs',
-        '/reservas',
-        '/contacto',
-        '/faq',
-        '/galeria',
-        '/sobre-nosotros',
-        '/normas-uso',
-        '/politica-privacidad',
-        '/politica-cookies'
-      ],
-      renderer: '@prerenderer/renderer-puppeteer',
-      rendererOptions: {
-        headless: true,
-        renderAfterDocumentEvent: 'render-event'
-      }
-    })
   ],
   define: {
     'process.env': process.env,
