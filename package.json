@@ -6,9 +6,9 @@
   "homepage": "https://anromercas.github.io/arkady-vite",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vike build",
+    "preview": "vike preview",
     "lint": "eslint .",
-    "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
@@ -31,7 +31,8 @@
     "react-router-dom": "^6.30.0",
     "react-toastify": "^11.0.5",
     "swiper": "^11.2.10",
-    "tailwind-merge": "^2.2.1"
+    "tailwind-merge": "^2.2.1",
+    "vike": "^0.4.236"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

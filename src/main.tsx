@@ -8,3 +8,8 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>
 );
+
+// Disparar evento para el prerenderizado
+if (typeof window !== 'undefined') {
+  window.dispatchEvent(new Event('render-event'));
+}
