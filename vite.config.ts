@@ -1,12 +1,15 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import prerender from 'vite-plugin-prerender';
+import vike from 'vike/plugin';
 import path from 'path';
 
 export default defineConfig({
-  base: 'https://arkadycelebraciones.es',
   plugins: [
     react(),
+    vike({
+      prerender: true
+    })
     prerender({
       routes: [
         '/',

@@ -6,10 +6,9 @@
   "homepage": "https://anromercas.github.io/arkady-vite",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && npm run generate",
-    "generate": "vite build --mode prerender",
+    "build": "vike build",
+    "preview": "vike preview",
     "lint": "eslint .",
-    "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
