@@ -15,10 +15,12 @@ function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <img src={logo} alt="Arkady Logo" className="h-12 w-12" />
-            <span className="ml-2 text-2xl font-bold">Arkady</span>
-          </div>
+          <NavLink to="/">
+            <div className="flex items-center">
+                <img src={logo} alt="Arkady Logo" className="h-12 w-12" />
+                <span className="ml-2 text-2xl font-bold">Arkady</span>
+            </div>
+          </NavLink>
           <div className="hidden md:flex space-x-8">
             <NavLink to="/" className={linkClass}>Inicio</NavLink>
             <NavLink to="/servicios" className={linkClass}>Servicios</NavLink>
