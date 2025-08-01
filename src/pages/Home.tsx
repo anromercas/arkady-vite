@@ -78,13 +78,13 @@ function Home() {
               <div className="flex gap-4">
 
                 <Link
-                  to="/reservas"
+                  to="/reservas/"
                   className="inline-block bg-[#20c997] hover:bg-white text-white hover:text-[#20c997] font-bold py-3 px-8 rounded-full shadow-md transition-colors"
                 >
                   Reservar Ahora
                 </Link>
                 <Link
-                  to="/packs"
+                  to="/packs/"
                   className="inline-block bg-white hover:text-white hover:bg-[#20c997] text-[#20c997] border-white font-bold py-3 px-8 rounded-full shadow-md transition-colors"
                 >
                   Ver Tipos de Reservas
@@ -143,7 +143,7 @@ function Home() {
             Reserva ahora para crear momentos mágicos y recuerdos inolvidables
           </p>
           <Link
-            to="/reservas"
+            to="/reservas/"
             className="inline-block bg-[#20c997] hover:bg-[#1ba884] text-white font-bold py-3 px-8 rounded-full shadow-md transition-colors"
           >
             Reservar Ahora

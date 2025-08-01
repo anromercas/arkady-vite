@@ -47,7 +47,7 @@ function Packs() {
                   </li>
                 </ul>
                 <Link
-                  to='/reservas'
+                  to='/reservas/'
                   className='inline-block w-full text-center bg-[#20c997] hover:bg-[#1ba884] text-white font-bold py-3 px-8 rounded-full shadow-md transition-colors'
                 >
                   Reservar Horario Mañana
@@ -84,7 +84,7 @@ function Packs() {
                   </li>
                 </ul>
                 <Link
-                  to='/reservas'
+                  to='/reservas/'
                   className='inline-block w-full text-center bg-white hover:bg-[#1ba884] hover:text-white text-[#20c997] font-bold py-3 px-8 rounded-full shadow-md transition-colors'
                 >
                   Reservar Día Completo
@@ -120,7 +120,7 @@ function Packs() {
                   </li>
                 </ul>
                 <Link
-                  to='/reservas'
+                  to='/reservas/'
                   className='inline-block w-full text-center bg-[#20c997] hover:bg-[#1ba884] text-white font-bold py-3 px-8 rounded-full shadow-md transition-colors'
                 >
                   Reservar Horario Tarde

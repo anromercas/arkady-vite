@@ -30,7 +30,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/servicios"
+                  to="/servicios/"
                   className="text-gray-400 hover:text-[#20c997]"
                 >
                   Servicios
@@ -38,7 +38,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/packs"
+                  to="/packs/"
                   className="text-gray-400 hover:text-[#20c997]"
                 >
                   Tipos de reservas
@@ -46,7 +46,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/reservas"
+                  to="/reservas/"
                   className="text-gray-400 hover:text-[#20c997]"
                 >
                   Reservas
@@ -54,7 +54,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/contacto"
+                  to="/contacto/"
                   className="text-gray-400 hover:text-[#20c997]"
                 >
                   Contacto
@@ -62,7 +62,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/faq"
+                  to="/faq/"
                   className="text-gray-400 hover:text-[#20c997]"
                 >
                   FAQ
@@ -70,7 +70,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/normas-uso"
+                  to="/normas-uso/"
                   className="text-gray-400 hover:text-[#20c997]"
                 >
                   Normas
@@ -78,7 +78,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/politica-privacidad"
+                  to="/politica-privacidad/"
                   className="text-gray-400 hover:text-[#20c997]"
                 >
                   Política
@@ -86,7 +86,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/politica-cookies"
+                  to="/politica-cookies/"
                   className="text-gray-400 hover:text-[#20c997]"
                 >
                   Cookies
@@ -94,7 +94,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/sobre-nosotros"
+                  to="/sobre-nosotros/"
                   className="text-gray-400 hover:text-[#20c997]"
                 >
                   Sobre Nosotros

@@ -123,7 +123,7 @@ function About() {
               divertido y lleno de magia.
             </p>
             <Link
-              to="/reservas"
+              to="/reservas/"
               className="inline-block bg-white hover:text-white hover:bg-[#1ba884] text-[#20c997] hover:text-white border-white font-bold py-3 px-8 rounded-full shadow-md transition-colors"
             >
               Reservar Ahora
@@ -238,7 +238,7 @@ function About() {
               Estamos aquí para ayudarte. Escríbenos y planifica tu evento con total confianza.
             </p>
             <Link
-              to="/contacto"
+              to="/contacto/"
               title="Contactar con Arkady Celebraciones en Sevilla"
               aria-label="Ir a la página de contacto de Arkady Celebraciones"
               className="inline-block bg-white hover:text-white hover:bg-[#1ba884] text-[#20c997] hover:text-white border-white font-bold py-3 px-8 rounded-full shadow-md transition-colors"
