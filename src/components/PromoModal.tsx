@@ -63,8 +63,11 @@ export default function PromoModal({
       <div className="absolute inset-0 bg-black/50" />
 
       {/* Modal */}
-      {/* Modal */}
       <div className="relative z-10 mx-4 max-w-[92vw] sm:max-w-md md:max-w-lg rounded-2xl shadow-2xl bg-white flex flex-col items-center">
+        {/* Texto superior */}
+        <p className="absolute text-center">
+          ¡Haz click en la imagen para Reservar!
+        </p>
         {/* Botón cerrar */}
         <button
           ref={closeBtnRef}
