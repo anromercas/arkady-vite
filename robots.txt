@@ -2,16 +2,3 @@ User-agent: *
 Allow: /
 
 Sitemap: https://arkadycelebraciones.es/sitemap.xml
-
-# Páginas prerenderizadas
-Allow: /index.html
-Allow: /servicios/index.html
-Allow: /packs/index.html
-Allow: /reservas/index.html
-Allow: /contacto/index.html
-Allow: /faq/index.html
-Allow: /galeria/index.html
-Allow: /sobre-nosotros/index.html
-Allow: /normas-uso/index.html
-Allow: /politica-privacidad/index.html
-Allow: /politica-cookies/index.html
