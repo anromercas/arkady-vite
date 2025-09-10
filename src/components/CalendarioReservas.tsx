@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "moment/locale/es";
@@ -61,9 +61,8 @@ const tramosHorarios = [
 ];
 
 // Endpoint para obtener reservas
-const RESERVAS_ENDPOINT =
-  "https://script.google.com/macros/s/AKfycbwclDYmwMtZjlUHk070xsrMpHCfKo_0fKE8neNy3mHgB_ztJvstlKtn06xNJ-JVP8Y2/exec"; // Nuria
-// const RESERVAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbw0b2KgTQpYaob_e0fU2IS5fgu0pY14zBMvpEOaoz-LNoM8PipJ0QpLqk5XztpKJ-KgGw/exec"; // Arkady producción
+// const RESERVAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwclDYmwMtZjlUHk070xsrMpHCfKo_0fKE8neNy3mHgB_ztJvstlKtn06xNJ-JVP8Y2/exec"; // Nuria
+const RESERVAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbw0b2KgTQpYaob_e0fU2IS5fgu0pY14zBMvpEOaoz-LNoM8PipJ0QpLqk5XztpKJ-KgGw/exec"; // Arkady producción
 
 export default function CalendarioReservas() {
   const [fechaSeleccionada, setFechaSeleccionada] = useState<Date | null>(null);
@@ -127,80 +126,81 @@ export default function CalendarioReservas() {
     date: Date,
     tramoType: string
   ): Promotion | null => {
+    const norm = (s: string) =>
+      (s || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+  
     const codeUp = code.trim().toUpperCase();
-
-    // 1) Filtra sólo las promos con ese código
+  
+    // 1) Por código
     const byCode = promotionsData.filter(
-      (p) => p.promotionCode.toUpperCase() === codeUp
+      (p) => (p.promotionCode || "").toString().trim().toUpperCase() === codeUp
     );
     if (byCode.length === 0) {
       throw new Error("INVALID_CODE");
     }
-
-    // 2) De esas, las que sean para este tramo o para "todos"
-    const byTramo = byCode.filter(
-      (p) => p.tramoHorario === tramoType || p.tramoHorario === "todos"
-    );
+  
+    // 2) Por tramo ("todos" o el tramo del usuario)
+    const tramoUser = norm(tramoType); // "dia completo" | "mañana" | "tarde"
+    const byTramo = byCode.filter((p) => {
+      const tramoPromo = norm(p.tramoHorario);
+      return tramoPromo === "todos" || tramoPromo === tramoUser;
+    });
     if (byTramo.length === 0) {
       throw new Error("INVALID_TRAMO");
     }
-
-    // 3) De esas, las que estén en rango de fechas
-    const ts = date.getTime();
+  
+    // 3) Por rango de fechas (evita problemas de husos)
+    const ts = new Date(date.getTime());
+    ts.setHours(12, 0, 0, 0);
     const inDateRange = byTramo.filter((p) => {
-      const start = new Date(p.start).getTime();
-      const end = new Date(p.end).getTime();
+      const start = new Date(p.start);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(p.end);
+      end.setHours(23, 59, 59, 999);
       return ts >= start && ts <= end;
     });
     if (inDateRange.length === 0) {
       throw new Error("INVALID_DATE");
     }
-
-    // 4) Prioridad según el día de la semana / festivo
-    const normalize = (s: string) =>
-      s
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
-    const hasToken = (p: Promotion, token: string) =>
-      normalize(p.days).split("-").includes(token);
-
+  
+    // 4) Resolver tokens del día
     const keyToday = formatDateKey(date);
     const tomorrow = new Date(date);
     tomorrow.setDate(date.getDate() + 1);
-    const keyTomorrow = formatDateKey(tomorrow);
     const holidays = generateHolidays(date.getFullYear());
     const isFestivo = holidays.includes(keyToday);
-    const isVispFest = holidays.includes(keyTomorrow);
-    const dow = date.getDay(); // 0=dom,1=lun,…,6=sab
-
-    // a) Sábado
-    if (dow === 6) {
-      return inDateRange.find((p) => hasToken(p, "sab")) || null;
-    }
-    // b) Domingo
-    if (dow === 0) {
-      return inDateRange.find((p) => hasToken(p, "dom")) || null;
-    }
-    // c) Festivo
-    if (isFestivo) {
-      return inDateRange.find((p) => hasToken(p, "fest")) || null;
-    }
-    // d) Viernes o víspera de festivo
-    if (dow === 5 || isVispFest) {
-      return (
-        inDateRange.find((p) => hasToken(p, "vie")) ??
-        inDateRange.find((p) => hasToken(p, "visp.fest")) ??
-        null
-      );
-    }
-    // e) Lunes–Jueves (incluye “todos” en days token)
-    return (
-      inDateRange.find((p) =>
-        ["lun", "mar", "mie", "jue", "todos"].some((tok) => hasToken(p, tok))
-      ) || null
-    );
+    const isVispFest = holidays.includes(formatDateKey(tomorrow));
+    const dow = date.getDay(); // 0=dom, 6=sab
+  
+    const wantedTokens =
+      dow === 6
+        ? ["sab"]
+        : dow === 0
+        ? ["dom"]
+        : isFestivo
+        ? ["fest"]
+        : dow === 5 || isVispFest
+        ? ["vie", "visp.fest"]
+        : ["lun", "mar", "mie", "jue"];
+  
+    // 5) Elegir promo: primero específica, si no hay → "todos"
+    const matchesSpecific = (p: Promotion) => {
+      const ds = norm(p.days).split("-");
+      return wantedTokens.some((t) => ds.includes(t));
+    };
+    const isTodos = (p: Promotion) => norm(p.days).split("-").includes("todos");
+  
+    const specific = inDateRange.find(matchesSpecific);
+    if (specific) return specific;
+  
+    const catchAll = inDateRange.find(isTodos);
+    return catchAll || null; // sin error: simplemente no aplica promo ese día
   };
+  
   // const getValidPromotion = (
   //   code: string,
   //   date: Date,
@@ -210,34 +210,39 @@ export default function CalendarioReservas() {
 
   //   // 1) Filtra sólo las promos con ese código
   //   const byCode = promotionsData.filter(
-  //     p => p.promotionCode.toUpperCase() === codeUp
+  //     (p) => p.promotionCode.toUpperCase() === codeUp
   //   );
   //   if (byCode.length === 0) {
-  //     throw new Error('INVALID_CODE');
+  //     throw new Error("INVALID_CODE");
   //   }
 
-  //   // 2) De esas, las que sean para este tramo (“dia completo” | “mañana” | “tarde”)
-  //   const byTramo = byCode.filter(p => p.tramoHorario === tramoType);
+  //   // 2) De esas, las que sean para este tramo o para "todos"
+  //   const byTramo = byCode.filter(
+  //     (p) => p.tramoHorario === tramoType || p.tramoHorario === "todos"
+  //   );
   //   if (byTramo.length === 0) {
-  //     throw new Error('INVALID_TRAMO');
+  //     throw new Error("INVALID_TRAMO");
   //   }
 
   //   // 3) De esas, las que estén en rango de fechas
   //   const ts = date.getTime();
-  //   const inDateRange = byTramo.filter(p => {
+  //   const inDateRange = byTramo.filter((p) => {
   //     const start = new Date(p.start).getTime();
   //     const end = new Date(p.end).getTime();
   //     return ts >= start && ts <= end;
   //   });
   //   if (inDateRange.length === 0) {
-  //     throw new Error('INVALID_DATE');
+  //     throw new Error("INVALID_DATE");
   //   }
 
   //   // 4) Prioridad según el día de la semana / festivo
   //   const normalize = (s: string) =>
-  //     s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  //     s
+  //       .normalize("NFD")
+  //       .replace(/[\u0300-\u036f]/g, "")
+  //       .toLowerCase();
   //   const hasToken = (p: Promotion, token: string) =>
-  //     normalize(p.days).split('-').includes(token);
+  //     normalize(p.days).split("-").includes(token);
 
   //   const keyToday = formatDateKey(date);
   //   const tomorrow = new Date(date);
@@ -250,31 +255,32 @@ export default function CalendarioReservas() {
 
   //   // a) Sábado
   //   if (dow === 6) {
-  //     return inDateRange.find(p => hasToken(p, 'sab')) || null;
+  //     return inDateRange.find((p) => hasToken(p, "sab")) || null;
   //   }
   //   // b) Domingo
   //   if (dow === 0) {
-  //     return inDateRange.find(p => hasToken(p, 'dom')) || null;
+  //     return inDateRange.find((p) => hasToken(p, "dom")) || null;
   //   }
   //   // c) Festivo
   //   if (isFestivo) {
-  //     return inDateRange.find(p => hasToken(p, 'fest')) || null;
+  //     return inDateRange.find((p) => hasToken(p, "fest")) || null;
   //   }
   //   // d) Viernes o víspera de festivo
   //   if (dow === 5 || isVispFest) {
   //     return (
-  //       inDateRange.find(p => hasToken(p, 'vie')) ??
-  //       inDateRange.find(p => hasToken(p, 'visp.fest')) ??
+  //       inDateRange.find((p) => hasToken(p, "vie")) ??
+  //       inDateRange.find((p) => hasToken(p, "visp.fest")) ??
   //       null
   //     );
   //   }
-  //   // e) Lunes–Jueves (incluye “todos”)
+  //   // e) Lunes–Jueves (incluye “todos” en days token)
   //   return (
-  //     inDateRange.find(p =>
-  //       ['lun', 'mar', 'mie', 'jue', 'todos'].some(tok => hasToken(p, tok))
+  //     inDateRange.find((p) =>
+  //       ["lun", "mar", "mie", "jue", "todos"].some((tok) => hasToken(p, tok))
   //     ) || null
   //   );
   // };
+
 
   // Agrupa reservas por día
   const aggregatedMap = reservasData.reduce(
@@ -674,6 +680,87 @@ export default function CalendarioReservas() {
     return {};
   };
 
+  // --- CÁLCULO DE PRECIO EN TIEMPO REAL (replica doPost) ---
+  const precioPreview = useMemo(() => {
+    if (!fechaSeleccionada || !tramoSeleccionado) return null;
+
+    const fecha = fechaSeleccionada;
+    const dow = fecha.getDay(); // 0=Dom..6=Sab
+    const year = fecha.getFullYear();
+    const holidays = generateHolidays(year);
+
+    const fechaKey = formatDateKey(fecha);
+    const manana = new Date(fecha);
+    manana.setDate(fecha.getDate() + 1);
+    const fechaMananaKey = formatDateKey(manana);
+
+    const esFestivoHoy = holidays.includes(fechaKey);
+    const esFestivoManiana = holidays.includes(fechaMananaKey);
+
+    // 1) Precio base según tramo
+    let precio = 0;
+    switch (tramoSeleccionado) {
+      case "10:00 - 22:00":
+        if (dow === 6 || dow === 0 || esFestivoHoy) precio = 200;
+        else if (dow === 5 || esFestivoManiana) precio = 180;
+        else precio = 140;
+        break;
+      case "10:00 - 15:00":
+        precio = 85;
+        break;
+      case "16:00 - 21:00":
+      case "17:00 - 22:00":
+        precio =
+          dow === 5 ||
+          dow === 6 ||
+          dow === 0 ||
+          esFestivoHoy ||
+          esFestivoManiana
+            ? 130
+            : 85;
+        break;
+    }
+
+    // 2) Extras de máquinas
+    if (formData.palomitero) precio += 10;
+    if (formData.algodonAzucar) precio += 10;
+
+    // 3) Promoción (si es válida para la fecha/tramo)
+    const codigo = formData.codigoPromocional?.trim();
+    if (codigo) {
+      const selectedTramoObj = tramosHorarios.find(
+        (t) => t.label === tramoSeleccionado
+      );
+      const selectedType = selectedTramoObj?.type; // "dia completo" | "mañana" | "tarde"
+      if (selectedType) {
+        try {
+          const promo = getValidPromotion(codigo, fecha, selectedType);
+          if (promo && typeof promo.percentage === "number") {
+            precio = Math.round((precio * (100 - promo.percentage)) / 100);
+          }
+        } catch {
+          // Código no aplicable → ignoramos promo en el preview
+        }
+      }
+    }
+
+    // 4) Horas extra (no entran en promo)
+    const horasExtra =
+      (formData.extraHoraAntes ? 1 : 0) + (formData.extraHoraDespues ? 1 : 0);
+    precio += horasExtra * 10;
+
+    return precio;
+  }, [
+    fechaSeleccionada,
+    tramoSeleccionado,
+    formData.palomitero,
+    formData.algodonAzucar,
+    formData.codigoPromocional,
+    formData.extraHoraAntes,
+    formData.extraHoraDespues,
+    promotionsData, // por si cambian promos cargadas
+  ]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -965,6 +1052,21 @@ export default function CalendarioReservas() {
                 Añadir <strong>Máquina de Algodón de Azúcar</strong> (+10€)
               </span>
             </label> */}
+
+              {/* --- TOTAL ESTIMADO --- */}
+              <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-4">
+                <div className="flex items-baseline justify-between">
+                  <span className="text-sm text-gray-600">Precio Total</span>
+                  <span className="text-2xl font-bold">
+                    {precioPreview !== null ? `${precioPreview} €` : "--"}
+                  </span>
+                </div>
+                <p className="mt-1 text-xs text-gray-500">
+                  El total se actualiza según tramo, extras y código
+                  promocional. Las horas extra (10€/h) no se descuentan con el
+                  código.
+                </p>
+              </div>
               <button
                 type="button"
                 className="w-full text-center mt-5 bg-[#20c997] hover:bg-[#1ba884] text-white font-bold py-3 px-8 rounded-full shadow-md transition-colors"
