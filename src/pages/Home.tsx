@@ -14,7 +14,8 @@ import "swiper/css/pagination";
 // Swiper modules
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 // import { Autoplay } from 'swiper/modules/autoplay/autoplay.js';
-import promoImg from "../assets/promo-septiembre.jpeg";
+//import promoImg from "../assets/promo-septiembre.jpeg";
+import promoImg from "../assets/promo-halloween-2025.jpeg";
 import PromoModal from "../components/PromoModal";
 
 function Home() {
@@ -178,9 +179,9 @@ function Home() {
 
       <PromoModal
         imgSrc={promoImg}
-        imgAlt="¡Promo de septiembre!"
+        imgAlt="¡Promo de halloween 2025!"
         href="/reservas" // opcional, quita si no quieres link
-        storageKey="arkady_promo_sep" // cambia por campaña para poder reactivarlo en el futuro
+        storageKey="arkady_promo_halloween2025" // cambia por campaña para poder reactivarlo en el futuro
         delayMs={800} // leve retardo para UX/LCP
       />
     </>
