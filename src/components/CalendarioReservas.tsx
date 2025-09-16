@@ -171,7 +171,7 @@ export default function CalendarioReservas() {
     const keyToday = formatDateKey(date);
     const tomorrow = new Date(date);
     tomorrow.setDate(date.getDate() + 1);
-    const holidays = generateHolidays(date.getFullYear());
+    const holidays = generateHolidays(date.getFullYear()).concat(generateHolidays(date.getFullYear() + 1));
     const isFestivo = holidays.includes(keyToday);
     const isVispFest = holidays.includes(formatDateKey(tomorrow));
     const dow = date.getDay(); // 0=dom, 6=sab
@@ -200,86 +200,6 @@ export default function CalendarioReservas() {
     const catchAll = inDateRange.find(isTodos);
     return catchAll || null; // sin error: simplemente no aplica promo ese día
   };
-  
-  // const getValidPromotion = (
-  //   code: string,
-  //   date: Date,
-  //   tramoType: string
-  // ): Promotion | null => {
-  //   const codeUp = code.trim().toUpperCase();
-
-  //   // 1) Filtra sólo las promos con ese código
-  //   const byCode = promotionsData.filter(
-  //     (p) => p.promotionCode.toUpperCase() === codeUp
-  //   );
-  //   if (byCode.length === 0) {
-  //     throw new Error("INVALID_CODE");
-  //   }
-
-  //   // 2) De esas, las que sean para este tramo o para "todos"
-  //   const byTramo = byCode.filter(
-  //     (p) => p.tramoHorario === tramoType || p.tramoHorario === "todos"
-  //   );
-  //   if (byTramo.length === 0) {
-  //     throw new Error("INVALID_TRAMO");
-  //   }
-
-  //   // 3) De esas, las que estén en rango de fechas
-  //   const ts = date.getTime();
-  //   const inDateRange = byTramo.filter((p) => {
-  //     const start = new Date(p.start).getTime();
-  //     const end = new Date(p.end).getTime();
-  //     return ts >= start && ts <= end;
-  //   });
-  //   if (inDateRange.length === 0) {
-  //     throw new Error("INVALID_DATE");
-  //   }
-
-  //   // 4) Prioridad según el día de la semana / festivo
-  //   const normalize = (s: string) =>
-  //     s
-  //       .normalize("NFD")
-  //       .replace(/[\u0300-\u036f]/g, "")
-  //       .toLowerCase();
-  //   const hasToken = (p: Promotion, token: string) =>
-  //     normalize(p.days).split("-").includes(token);
-
-  //   const keyToday = formatDateKey(date);
-  //   const tomorrow = new Date(date);
-  //   tomorrow.setDate(date.getDate() + 1);
-  //   const keyTomorrow = formatDateKey(tomorrow);
-  //   const holidays = generateHolidays(date.getFullYear());
-  //   const isFestivo = holidays.includes(keyToday);
-  //   const isVispFest = holidays.includes(keyTomorrow);
-  //   const dow = date.getDay(); // 0=dom,1=lun,…,6=sab
-
-  //   // a) Sábado
-  //   if (dow === 6) {
-  //     return inDateRange.find((p) => hasToken(p, "sab")) || null;
-  //   }
-  //   // b) Domingo
-  //   if (dow === 0) {
-  //     return inDateRange.find((p) => hasToken(p, "dom")) || null;
-  //   }
-  //   // c) Festivo
-  //   if (isFestivo) {
-  //     return inDateRange.find((p) => hasToken(p, "fest")) || null;
-  //   }
-  //   // d) Viernes o víspera de festivo
-  //   if (dow === 5 || isVispFest) {
-  //     return (
-  //       inDateRange.find((p) => hasToken(p, "vie")) ??
-  //       inDateRange.find((p) => hasToken(p, "visp.fest")) ??
-  //       null
-  //     );
-  //   }
-  //   // e) Lunes–Jueves (incluye “todos” en days token)
-  //   return (
-  //     inDateRange.find((p) =>
-  //       ["lun", "mar", "mie", "jue", "todos"].some((tok) => hasToken(p, tok))
-  //     ) || null
-  //   );
-  // };
 
 
   // Agrupa reservas por día
@@ -687,7 +607,7 @@ export default function CalendarioReservas() {
     const fecha = fechaSeleccionada;
     const dow = fecha.getDay(); // 0=Dom..6=Sab
     const year = fecha.getFullYear();
-    const holidays = generateHolidays(year);
+    const holidays = generateHolidays(year).concat(generateHolidays(year + 1));
 
     const fechaKey = formatDateKey(fecha);
     const manana = new Date(fecha);
@@ -793,7 +713,7 @@ export default function CalendarioReservas() {
 
   // Determinar si es fin de semana o festivo
   const yearSel = fechaSeleccionada?.getFullYear();
-  const holidays = yearSel ? generateHolidays(yearSel) : [];
+  const holidays = yearSel ? generateHolidays(yearSel).concat(generateHolidays(yearSel + 1)) : [];
   const keySel = fechaSeleccionada ? formatDateKey(fechaSeleccionada) : "";
   const isWeekend = fechaSeleccionada
     ? [0, 6].includes(fechaSeleccionada.getDay())
