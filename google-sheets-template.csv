@@ -1,0 +1,4 @@
+id,title,imageUrl,imageAlt,href,storageKey,active,startDate,endDate,delayMs
+promo_halloween_2025,Halloween 2025,https://drive.google.com/uc?id=YOUR_FILE_ID,¡Promo de Halloween 2025!,/reservas,arkady_promo_halloween2025,TRUE,2025-10-01,2025-11-01,800
+promo_navidad_2025,Navidad 2025,https://drive.google.com/uc?id=YOUR_FILE_ID,¡Promo de Navidad 2025!,/reservas,arkady_promo_navidad2025,FALSE,2025-12-01,2025-12-31,800
+promo_reyes_2026,Reyes 2026,https://drive.google.com/uc?id=YOUR_FILE_ID,¡Promo de Reyes 2026!,/reservas,arkady_promo_reyes2026,FALSE,2026-01-01,2026-01-10,800

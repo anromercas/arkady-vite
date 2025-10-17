@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import Services from "./Services";
 import { Link } from "react-router-dom";
 import Seo from "../seo/Seo";
@@ -13,12 +13,22 @@ import "swiper/css/pagination";
 
 // Swiper modules
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
-// import { Autoplay } from 'swiper/modules/autoplay/autoplay.js';
-//import promoImg from "../assets/promo-septiembre.jpeg";
-import promoImg from "../assets/promo-halloween-2025.jpeg";
 import PromoModal from "../components/PromoModal";
+import { fetchPromotions } from "../lib/promotionsApi";
+import { Promotion } from "../types/promotion";
 
 function Home() {
+  const [promotions, setPromotions] = useState<Promotion[]>([]);
+
+  // Cargar promociones al montar el componente
+  useEffect(() => {
+    const loadPromotions = async () => {
+      const promos = await fetchPromotions();
+      setPromotions(promos);
+    };
+    loadPromotions();
+  }, []);
+
   const testimonials = [
     {
       name: "Carlos Prieto",
@@ -177,13 +187,17 @@ function Home() {
         }
       />
 
-      <PromoModal
-        imgSrc={promoImg}
-        imgAlt="¡Promo de halloween 2025!"
-        href="/reservas" // opcional, quita si no quieres link
-        storageKey="arkady_promo_halloween2025" // cambia por campaña para poder reactivarlo en el futuro
-        delayMs={800} // leve retardo para UX/LCP
-      />
+      {/* Renderizar todas las promociones activas */}
+      {promotions.map((promo, index) => (
+        <PromoModal
+          key={promo.id}
+          imgSrc={promo.imageUrl}
+          imgAlt={promo.imageAlt}
+          href={promo.href}
+          storageKey={promo.storageKey}
+          delayMs={(promo.delayMs || 800) + index * 100} // Pequeño delay adicional entre modales
+        />
+      ))}
     </>
   );
 }
