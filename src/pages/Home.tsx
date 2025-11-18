@@ -15,7 +15,7 @@ import "swiper/css/pagination";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 // import { Autoplay } from 'swiper/modules/autoplay/autoplay.js';
 //import promoImg from "../assets/promo-septiembre.jpeg";
-import promoImg from "../assets/promo-otono-2025.jpeg";
+import promoImg from "../assets/promo-navidad-2025.jpeg";
 import PromoModal from "../components/PromoModal";
 
 function Home() {
@@ -179,9 +179,9 @@ function Home() {
 
       <PromoModal
         imgSrc={promoImg}
-        imgAlt="¡Promo de otoño 2025!"
+        imgAlt="¡Promo de navidad 2025!"
         href="/reservas" // opcional, quita si no quieres link
-        storageKey="arkady_promo_otono2025" // cambia por campaña para poder reactivarlo en el futuro
+        storageKey="arkady_promo_navidad2025" // cambia por campaña para poder reactivarlo en el futuro
         delayMs={800} // leve retardo para UX/LCP
       />
     </>
