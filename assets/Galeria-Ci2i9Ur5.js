@@ -1,4 +1,4 @@
-import{a as i,r as t,j as a,X as d}from"./app-DQOHgaSQ.js";import{i as u,a as m,b as p,c as h,d as b,e as f,f as g}from"./arkadycelebraciones-24-Zs4ceRpJ.js";import{S as y}from"./Seo-YnAqWNK-.js";/**
+import{a as i,r as t,j as a,X as d}from"./app-Dv1tOBw_.js";import{i as u,a as m,b as p,c as h,d as b,e as f,f as g}from"./arkadycelebraciones-24-Zs4ceRpJ.js";import{S as y}from"./Seo-DP5CXkzP.js";/**
  * @license lucide-react v0.344.0 - ISC
  *
  * This source code is licensed under the ISC license.
