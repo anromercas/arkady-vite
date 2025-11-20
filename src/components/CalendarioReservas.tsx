@@ -62,7 +62,8 @@ const tramosHorarios = [
 
 // Endpoint para obtener reservas
 // const RESERVAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwclDYmwMtZjlUHk070xsrMpHCfKo_0fKE8neNy3mHgB_ztJvstlKtn06xNJ-JVP8Y2/exec"; // Nuria
-const RESERVAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbw0b2KgTQpYaob_e0fU2IS5fgu0pY14zBMvpEOaoz-LNoM8PipJ0QpLqk5XztpKJ-KgGw/exec"; // Arkady producción
+// const RESERVAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbw0b2KgTQpYaob_e0fU2IS5fgu0pY14zBMvpEOaoz-LNoM8PipJ0QpLqk5XztpKJ-KgGw/exec"; // Arkady producción
+const RESERVAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbw0b2KgTQpYaob_e0fU2IS5fgu0pY14zBMvpEOaoz-LNoM8PipJ0QpLqk5XztpKJ-KgGwaaaaaaa/exec"; // Arkady producción  BROCKEN
 
 export default function CalendarioReservas() {
   const [fechaSeleccionada, setFechaSeleccionada] = useState<Date | null>(null);
