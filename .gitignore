@@ -27,3 +27,11 @@ dist-ssr
 # Prerender cache
 .prerender-cache
 .env
+
+# Local Netlify folder
+.netlify
+
+# CLAUDE.md and netlify.toml (documentation files)
+CLAUDE.md
+netlify.toml
+

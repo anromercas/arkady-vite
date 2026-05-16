@@ -12,9 +12,12 @@ interface Reserva {
   email: string;
   dni: string;
   telefono: string;
+  domicilio: string;
+  codigoPostal: string;
   tramoHorario: string;
   diaSeleccionado: string;
   aceptaNormas: boolean;
+  aceptaSonido: boolean;
   palomitero: boolean;
   algodonAzucar: boolean;
   codigoPromocional?: string;
@@ -61,14 +64,16 @@ const tramosHorarios = [
 ];
 
 // Endpoint para obtener reservas
-// const RESERVAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbwclDYmwMtZjlUHk070xsrMpHCfKo_0fKE8neNy3mHgB_ztJvstlKtn06xNJ-JVP8Y2/exec"; // Nuria
-// const RESERVAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbw0b2KgTQpYaob_e0fU2IS5fgu0pY14zBMvpEOaoz-LNoM8PipJ0QpLqk5XztpKJ-KgGw/exec"; // Arkady producción
-const RESERVAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbw0b2KgTQpYaob_e0fU2IS5fgu0pY14zBMvpEOaoz-LNoM8PipJ0QpLqk5XztpKJ-KgGwaaaaaaa/exec"; // Arkady producción  BROCKEN
+// const RESERVAS_ENDPOINT =
+// "https://script.google.com/macros/s/AKfycbwclDYmwMtZjlUHk070xsrMpHCfKo_0fKE8neNy3mHgB_ztJvstlKtn06xNJ-JVP8Y2/exec"; // Nuria
+const RESERVAS_ENDPOINT =
+  "https://script.google.com/macros/s/AKfycbw0b2KgTQpYaob_e0fU2IS5fgu0pY14zBMvpEOaoz-LNoM8PipJ0QpLqk5XztpKJ-KgGw/exec"; // Arkady producción
+// const RESERVAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbw0b2KgTQpYaob_e0fU2IS5fgu0pY14zBMvpEOaoz-LNoM8PipJ0QpLqk5XztpKJ-KgGwaaaaaaa/exec"; // Arkady producción  BROCKEN
 
 export default function CalendarioReservas() {
   const [fechaSeleccionada, setFechaSeleccionada] = useState<Date | null>(null);
   const [tramoSeleccionado, setTramoSeleccionado] = useState<string | null>(
-    null
+    null,
   );
   const [promotionsData, setPromotionsData] = useState<Promotion[]>([]);
   const [selectedPromo, setSelectedPromo] = useState<Promotion | null>(null);
@@ -77,9 +82,12 @@ export default function CalendarioReservas() {
     email: "",
     dni: "",
     telefono: "",
+    domicilio: "",
+    codigoPostal: "",
     tramoHorario: "",
     diaSeleccionado: "",
     aceptaNormas: false,
+    aceptaSonido: false,
     palomitero: false,
     algodonAzucar: false,
     codigoPromocional: "",
@@ -125,7 +133,7 @@ export default function CalendarioReservas() {
   const getValidPromotion = (
     code: string,
     date: Date,
-    tramoType: string
+    tramoType: string,
   ): Promotion | null => {
     const norm = (s: string) =>
       (s || "")
@@ -133,17 +141,17 @@ export default function CalendarioReservas() {
         .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase()
         .trim();
-  
+
     const codeUp = code.trim().toUpperCase();
-  
+
     // 1) Por código
     const byCode = promotionsData.filter(
-      (p) => (p.promotionCode || "").toString().trim().toUpperCase() === codeUp
+      (p) => (p.promotionCode || "").toString().trim().toUpperCase() === codeUp,
     );
     if (byCode.length === 0) {
       throw new Error("INVALID_CODE");
     }
-  
+
     // 2) Por tramo ("todos" o el tramo del usuario)
     const tramoUser = norm(tramoType); // "dia completo" | "mañana" | "tarde"
     const byTramo = byCode.filter((p) => {
@@ -153,7 +161,7 @@ export default function CalendarioReservas() {
     if (byTramo.length === 0) {
       throw new Error("INVALID_TRAMO");
     }
-  
+
     // 3) Por rango de fechas (evita problemas de husos)
     const ts = new Date(date.getTime());
     ts.setHours(12, 0, 0, 0);
@@ -167,41 +175,42 @@ export default function CalendarioReservas() {
     if (inDateRange.length === 0) {
       throw new Error("INVALID_DATE");
     }
-  
+
     // 4) Resolver tokens del día
     const keyToday = formatDateKey(date);
     const tomorrow = new Date(date);
     tomorrow.setDate(date.getDate() + 1);
-    const holidays = generateHolidays(date.getFullYear()).concat(generateHolidays(date.getFullYear() + 1));
+    const holidays = generateHolidays(date.getFullYear()).concat(
+      generateHolidays(date.getFullYear() + 1),
+    );
     const isFestivo = holidays.includes(keyToday);
     const isVispFest = holidays.includes(formatDateKey(tomorrow));
     const dow = date.getDay(); // 0=dom, 6=sab
-  
+
     const wantedTokens =
       dow === 6
         ? ["sab"]
         : dow === 0
-        ? ["dom"]
-        : isFestivo
-        ? ["fest"]
-        : dow === 5 || isVispFest
-        ? ["vie", "visp.fest"]
-        : ["lun", "mar", "mie", "jue"];
-  
+          ? ["dom"]
+          : isFestivo
+            ? ["fest"]
+            : dow === 5 || isVispFest
+              ? ["vie", "visp.fest"]
+              : ["lun", "mar", "mie", "jue"];
+
     // 5) Elegir promo: primero específica, si no hay → "todos"
     const matchesSpecific = (p: Promotion) => {
       const ds = norm(p.days).split("-");
       return wantedTokens.some((t) => ds.includes(t));
     };
     const isTodos = (p: Promotion) => norm(p.days).split("-").includes("todos");
-  
+
     const specific = inDateRange.find(matchesSpecific);
     if (specific) return specific;
-  
+
     const catchAll = inDateRange.find(isTodos);
     return catchAll || null; // sin error: simplemente no aplica promo ese día
   };
-
 
   // Agrupa reservas por día
   const aggregatedMap = reservasData.reduce(
@@ -214,7 +223,7 @@ export default function CalendarioReservas() {
       }
       return acc;
     },
-    {}
+    {},
   );
 
   // Determina el estado del día
@@ -235,7 +244,7 @@ export default function CalendarioReservas() {
     const status = getDayStatus(date);
     if (status === "ocupado") {
       toast.error(
-        "El día está completamente ocupado. No se pueden reservar franjas."
+        "El día está completamente ocupado. No se pueden reservar franjas.",
       );
       resetForm();
       return;
@@ -367,6 +376,12 @@ export default function CalendarioReservas() {
     if (!formData.dni.trim()) nuevosErrores.dni = "El DNI es obligatorio";
     if (!formData.telefono.trim())
       nuevosErrores.telefono = "El teléfono es obligatorio";
+    if (!formData.domicilio.trim())
+      nuevosErrores.domicilio = "El domicilio es obligatorio";
+    if (!formData.codigoPostal.trim())
+      nuevosErrores.codigoPostal = "El código postal es obligatorio";
+    if (!formData.aceptaSonido)
+      nuevosErrores.aceptaSonido = "Debes confirmar esta norma para continuar";
     if (!formData.aceptaNormas)
       nuevosErrores.aceptaNormas = "Debes aceptar las normas y políticas";
 
@@ -411,8 +426,14 @@ export default function CalendarioReservas() {
       nuevosErrores.telefono = "El formato del teléfono es inválido";
     }
 
+    // Validación de código postal (5 dígitos)
+    const cpRegex = /^\d{5}$/;
+    if (formData.codigoPostal.trim() && !cpRegex.test(formData.codigoPostal)) {
+      nuevosErrores.codigoPostal = "El código postal debe tener 5 dígitos";
+    }
+
     const selectedTramoObj = tramosHorarios.find(
-      (t) => t.label === tramoSeleccionado
+      (t) => t.label === tramoSeleccionado,
     );
     if (!selectedTramoObj) {
       nuevosErrores.tramoHorario = "Selecciona un tramo válido";
@@ -435,7 +456,7 @@ export default function CalendarioReservas() {
           const found = getValidPromotion(
             code,
             fechaSeleccionada,
-            selectedType!
+            selectedType!,
           );
           if (found) {
             promoValida = found;
@@ -508,9 +529,12 @@ export default function CalendarioReservas() {
       email: "",
       dni: "",
       telefono: "",
+      domicilio: "",
+      codigoPostal: "",
       tramoHorario: "",
       diaSeleccionado: "",
       aceptaNormas: false,
+      aceptaSonido: false,
       palomitero: false,
       algodonAzucar: false,
       codigoPromocional: "",
@@ -532,6 +556,8 @@ export default function CalendarioReservas() {
       params.append("email", reserva.email);
       params.append("dni", reserva.dni);
       params.append("telefono", reserva.telefono);
+      params.append("domicilio", reserva.domicilio);
+      params.append("codigoPostal", reserva.codigoPostal);
       if (promoValida) {
         // envía todo el objeto como JSON
         params.append("promocion", JSON.stringify(promoValida));
@@ -539,17 +565,18 @@ export default function CalendarioReservas() {
       // params.append('codigoPromocional', reserva.codigoPromocional ? reserva.codigoPromocional : '');
       params.append("diaSeleccionado", reserva.diaSeleccionado);
       params.append("tramoHorario", reserva.tramoHorario);
+      params.append("aceptaSonido", reserva.aceptaSonido ? "true" : "false");
       params.append("aceptaNormas", reserva.aceptaNormas ? "true" : "false");
       params.append("palomitero", reserva.palomitero ? "true" : "false");
       params.append("algodonAzucar", reserva.algodonAzucar ? "true" : "false");
       params.append("fechaReserva", new Date().toISOString().split("T")[0]);
       params.append(
         "extraHoraAntes",
-        reserva.extraHoraAntes ? "true" : "false"
+        reserva.extraHoraAntes ? "true" : "false",
       );
       params.append(
         "extraHoraDespues",
-        reserva.extraHoraDespues ? "true" : "false"
+        reserva.extraHoraDespues ? "true" : "false",
       );
       params.append("horasExtra", String(extraCount));
 
@@ -650,7 +677,7 @@ export default function CalendarioReservas() {
     const codigo = formData.codigoPromocional?.trim();
     if (codigo) {
       const selectedTramoObj = tramosHorarios.find(
-        (t) => t.label === tramoSeleccionado
+        (t) => t.label === tramoSeleccionado,
       );
       const selectedType = selectedTramoObj?.type; // "dia completo" | "mañana" | "tarde"
       if (selectedType) {
@@ -714,7 +741,9 @@ export default function CalendarioReservas() {
 
   // Determinar si es fin de semana o festivo
   const yearSel = fechaSeleccionada?.getFullYear();
-  const holidays = yearSel ? generateHolidays(yearSel).concat(generateHolidays(yearSel + 1)) : [];
+  const holidays = yearSel
+    ? generateHolidays(yearSel).concat(generateHolidays(yearSel + 1))
+    : [];
   const keySel = fechaSeleccionada ? formatDateKey(fechaSeleccionada) : "";
   const isWeekend = fechaSeleccionada
     ? [0, 6].includes(fechaSeleccionada.getDay())
@@ -757,11 +786,11 @@ export default function CalendarioReservas() {
 
   // +1h DESPUÉS en: full day, tarde verano, tarde invierno
   const canAddAfter = Boolean(
-    isFullDaySel || isTardeVeranoSel || isTardeInviernoSel
+    isFullDaySel || isTardeVeranoSel || isTardeInviernoSel,
   );
 
   const canShowExtras = Boolean(
-    tramoSeleccionado && (canAddBefore || canAddAfter)
+    tramoSeleccionado && (canAddBefore || canAddAfter),
   );
 
   // Function to get the last Sunday of a month
@@ -890,33 +919,61 @@ export default function CalendarioReservas() {
           </div>
           <div className="bg-white/40 shadow-lg rounded-lg p-6 w-full max-w-xl mt-6">
             <form className=" max-w-lg mx-auto text-left space-y-3">
-              {["nombre", "email", "dni", "telefono", "codigoPromocional"].map(
-                (field) => (
-                  <div key={field} className="mb-2">
-                    <label className="block">
-                      {field === "nombre"
-                        ? "Nombre y Apellidos:"
-                        : field === "dni"
+              {[
+                "nombre",
+                "email",
+                "dni",
+                "telefono",
+                "domicilio",
+                "codigoPostal",
+                "codigoPromocional",
+              ].map((field) => (
+                <div key={field} className="mb-2">
+                  <label className="block">
+                    {field === "nombre"
+                      ? "Nombre y Apellidos:"
+                      : field === "dni"
                         ? "DNI/NIE/NIF/Pasaporte:"
-                        : field === "codigoPromocional"
-                        ? "Código Promocional:"
-                        : `${field.charAt(0).toUpperCase() + field.slice(1)}:`}
-                    </label>
-                    <input
-                      type={field === "email" ? "email" : "text"}
-                      name={field}
-                      value={(formData as any)[field]}
-                      onChange={handleChange}
-                      className={`w-full p-2 border rounded mt-1 ${
-                        errors[field] ? "border-red-500" : ""
-                      }`}
-                      required
-                    />
-                    {errors[field] && (
-                      <p className="text-red-500 text-sm">{errors[field]}</p>
-                    )}
-                  </div>
-                )
+                        : field === "domicilio"
+                          ? "Domicilio (calle, número, piso):"
+                          : field === "codigoPostal"
+                            ? "Código Postal:"
+                            : field === "codigoPromocional"
+                              ? "Código Promocional:"
+                              : `${field.charAt(0).toUpperCase() + field.slice(1)}:`}
+                  </label>
+                  <input
+                    type={field === "email" ? "email" : "text"}
+                    name={field}
+                    value={(formData as any)[field]}
+                    onChange={handleChange}
+                    className={`w-full p-2 border rounded mt-1 ${
+                      errors[field] ? "border-red-500" : ""
+                    }`}
+                    required
+                  />
+                  {errors[field] && (
+                    <p className="text-red-500 text-sm">{errors[field]}</p>
+                  )}
+                </div>
+              ))}
+
+              <label className="flex items-start mt-2">
+                <input
+                  type="checkbox"
+                  name="aceptaSonido"
+                  checked={formData.aceptaSonido}
+                  onChange={handleChange}
+                  className="mr-2 mt-1 shrink-0"
+                />
+                <span>
+                  Acepto que <strong>NO está permitido</strong> traer ni
+                  utilizar altavoces, micrófonos, megáfonos ni equipos de sonido
+                  externos durante el desarrollo del evento.
+                </span>
+              </label>
+              {errors.aceptaSonido && (
+                <p className="text-red-500 text-sm">{errors.aceptaSonido}</p>
               )}
 
               <label className="flex items-center mt-2">
