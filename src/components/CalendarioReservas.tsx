@@ -18,8 +18,6 @@ interface Reserva {
   diaSeleccionado: string;
   aceptaNormas: boolean;
   aceptaSonido: boolean;
-  palomitero: boolean;
-  algodonAzucar: boolean;
   codigoPromocional?: string;
   extraHoraAntes?: boolean;
   extraHoraDespues?: boolean;
@@ -88,8 +86,6 @@ export default function CalendarioReservas() {
     diaSeleccionado: "",
     aceptaNormas: false,
     aceptaSonido: false,
-    palomitero: false,
-    algodonAzucar: false,
     codigoPromocional: "",
     extraHoraAntes: false,
     extraHoraDespues: false,
@@ -535,8 +531,6 @@ export default function CalendarioReservas() {
       diaSeleccionado: "",
       aceptaNormas: false,
       aceptaSonido: false,
-      palomitero: false,
-      algodonAzucar: false,
       codigoPromocional: "",
       extraHoraAntes: false,
       extraHoraDespues: false,
@@ -567,8 +561,6 @@ export default function CalendarioReservas() {
       params.append("tramoHorario", reserva.tramoHorario);
       params.append("aceptaSonido", reserva.aceptaSonido ? "true" : "false");
       params.append("aceptaNormas", reserva.aceptaNormas ? "true" : "false");
-      params.append("palomitero", reserva.palomitero ? "true" : "false");
-      params.append("algodonAzucar", reserva.algodonAzucar ? "true" : "false");
       params.append("fechaReserva", new Date().toISOString().split("T")[0]);
       params.append(
         "extraHoraAntes",
@@ -669,11 +661,7 @@ export default function CalendarioReservas() {
         break;
     }
 
-    // 2) Extras de máquinas
-    if (formData.palomitero) precio += 10;
-    if (formData.algodonAzucar) precio += 10;
-
-    // 3) Promoción (si es válida para la fecha/tramo)
+    // 2) Promoción (si es válida para la fecha/tramo)
     const codigo = formData.codigoPromocional?.trim();
     if (codigo) {
       const selectedTramoObj = tramosHorarios.find(
@@ -701,8 +689,6 @@ export default function CalendarioReservas() {
   }, [
     fechaSeleccionada,
     tramoSeleccionado,
-    formData.palomitero,
-    formData.algodonAzucar,
     formData.codigoPromocional,
     formData.extraHoraAntes,
     formData.extraHoraDespues,
