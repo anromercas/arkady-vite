@@ -108,7 +108,7 @@ export default function CalendarioReservas() {
 
   const fetchReservas = useCallback(async () => {
     try {
-      const response = await fetch(RESERVAS_ENDPOINT);
+      const response = await fetch(`${RESERVAS_ENDPOINT}?action=getReservations`);
       if (!response.ok) throw new Error("Error al obtener reservas");
       const data = await response.json();
       const raw: Reserva[] = data.raw || [];
