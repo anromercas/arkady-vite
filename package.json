@@ -8,9 +8,9 @@
     "dev": "vite-react-ssg dev",
     "build": "vite-react-ssg build",
     "lint": "eslint .",
-    "predeploy": "npm run build",
+    "predeploy": "pnpm run build",
     "deploy": "gh-pages -d dist",
-    "serve": "npx serve dist"
+    "serve": "pnpm dlx serve dist"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",
@@ -29,7 +29,7 @@
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
     "react-toastify": "^11.0.5",
-    "swiper": "^11.2.10",
+    "swiper": "^12.1.4",
     "tailwind-merge": "^2.2.1"
   },
   "devDependencies": {
@@ -52,7 +52,13 @@
     "vite": "^5.4.2",
     "vite-react-ssg": "^0.8.8"
   },
-  "overrides": {
-    "rollup": "4.29.1"
+  "pnpm": {
+    "overrides": {
+      "rollup": "4.29.1"
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "puppeteer"
+    ]
   }
 }
