@@ -43,7 +43,7 @@ const faqData: { question: string; answer: React.ReactNode }[] = [
     answer: (
       <>
         Para confirmar la reserva, es necesario abonar un depósito de 75 € en las 24 horas siguientes a la solicitud.<br />
-        Este importe será reembolsado al día siguiente del evento, siempre que las instalaciones se encuentren en buen estado tras su uso.<br />
+        Este importe será reembolsado en un plazo de 48 horas tras el evento, siempre que las instalaciones se encuentren en buen estado tras su uso.<br />
         En caso de fuerza mayor que te impida celebrar tu evento en la fecha acordada, podrás solicitar un cambio con al menos 72 horas de antelación. Haremos lo posible por ofrecerte una nueva fecha que se ajuste a tus necesidades.<br />
         <strong>Importante:</strong> En ningún caso de cancelación se devolverá la fianza.
       </>

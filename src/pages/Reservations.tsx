@@ -70,7 +70,7 @@ function Reservations() {
                 Para confirmar tu reserva,{' '}
                 <strong>se requiere un depósito de 75 €</strong>, que deberá abonarse en las{' '}
                 <strong>24 horas</strong> siguientes a la solicitud. Este importe será
-                reembolsado al día siguiente del evento, tras verificar el cumplimiento
+                reembolsado en un plazo de 48 horas tras el evento, previa verificación del cumplimiento
                 de nuestras normas y condiciones.
               </p>
               {/* List of payment methods */}

@@ -144,7 +144,7 @@ export default function NormasUso() {
             Salida de la sala
           </h2>
           <ul className="list-disc ml-5 mt-2"> {/* Added mt-2 */}
-            <li>Si todo está en orden, la <b>fianza se devolverá al día siguiente</b>.</li>
+            <li>Si todo está en orden, la <b>fianza se devolverá en un plazo de 48 horas</b>.</li>
             <li>En caso de daños o incumplimiento, <b>la fianza se perderá totalmente</b>.</li>
             <li>Si los daños superan el valor de la fianza, el cliente deberá abonar la diferencia.</li>
             <li>Las <b>pertenencias olvidadas</b> se guardarán durante <b>un mes</b>.</li>
