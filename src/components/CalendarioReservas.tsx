@@ -18,6 +18,7 @@ interface Reserva {
   diaSeleccionado: string;
   aceptaNormas: boolean;
   aceptaSonido: boolean;
+  aceptaMobiliario: boolean;
   codigoPromocional?: string;
   extraHoraAntes?: boolean;
   extraHoraDespues?: boolean;
@@ -86,6 +87,7 @@ export default function CalendarioReservas() {
     diaSeleccionado: "",
     aceptaNormas: false,
     aceptaSonido: false,
+    aceptaMobiliario: false,
     codigoPromocional: "",
     extraHoraAntes: false,
     extraHoraDespues: false,
@@ -378,6 +380,9 @@ export default function CalendarioReservas() {
       nuevosErrores.codigoPostal = "El código postal es obligatorio";
     if (!formData.aceptaSonido)
       nuevosErrores.aceptaSonido = "Debes confirmar esta norma para continuar";
+    if (!formData.aceptaMobiliario)
+      nuevosErrores.aceptaMobiliario =
+        "Debes confirmar esta norma para continuar";
     if (!formData.aceptaNormas)
       nuevosErrores.aceptaNormas = "Debes aceptar las normas y políticas";
 
@@ -531,6 +536,7 @@ export default function CalendarioReservas() {
       diaSeleccionado: "",
       aceptaNormas: false,
       aceptaSonido: false,
+      aceptaMobiliario: false,
       codigoPromocional: "",
       extraHoraAntes: false,
       extraHoraDespues: false,
@@ -560,6 +566,10 @@ export default function CalendarioReservas() {
       params.append("diaSeleccionado", reserva.diaSeleccionado);
       params.append("tramoHorario", reserva.tramoHorario);
       params.append("aceptaSonido", reserva.aceptaSonido ? "true" : "false");
+      params.append(
+        "aceptaMobiliario",
+        reserva.aceptaMobiliario ? "true" : "false",
+      );
       params.append("aceptaNormas", reserva.aceptaNormas ? "true" : "false");
       params.append("fechaReserva", new Date().toISOString().split("T")[0]);
       params.append(
@@ -960,6 +970,27 @@ export default function CalendarioReservas() {
               </label>
               {errors.aceptaSonido && (
                 <p className="text-red-500 text-sm">{errors.aceptaSonido}</p>
+              )}
+
+              <label className="flex items-start mt-2">
+                <input
+                  type="checkbox"
+                  name="aceptaMobiliario"
+                  checked={formData.aceptaMobiliario}
+                  onChange={handleChange}
+                  className="mr-2 mt-1 shrink-0"
+                />
+                <span>
+                  Acepto que <strong>no está permitido</strong> sacar ni
+                  instalar mobiliario en el exterior ni generar ruidos o
+                  molestias, comprometiéndome a respetar el descanso vecinal
+                  durante toda la celebración.
+                </span>
+              </label>
+              {errors.aceptaMobiliario && (
+                <p className="text-red-500 text-sm">
+                  {errors.aceptaMobiliario}
+                </p>
               )}
 
               <label className="flex items-center mt-2">
