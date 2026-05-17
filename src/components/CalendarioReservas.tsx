@@ -981,7 +981,7 @@ export default function CalendarioReservas() {
                   className="mr-2 mt-1 shrink-0"
                 />
                 <span>
-                  Acepto que <strong>no está permitido</strong> sacar ni
+                  Acepto que <strong>NO está permitido</strong> sacar ni
                   instalar mobiliario en el exterior ni generar ruidos o
                   molestias, comprometiéndome a respetar el descanso vecinal
                   durante toda la celebración.
