@@ -693,7 +693,7 @@ export default function CalendarioReservas() {
     // 4) Horas extra (no entran en promo)
     const horasExtra =
       (formData.extraHoraAntes ? 1 : 0) + (formData.extraHoraDespues ? 1 : 0);
-    precio += horasExtra * 10;
+    precio += horasExtra * 20;
 
     return precio;
   }, [
@@ -880,7 +880,7 @@ export default function CalendarioReservas() {
             {canShowExtras && (
               <div className="mt-4 p-3 rounded-md bg-amber-50 border border-amber-200 max-w-lg mx-auto text-center">
                 <p className="font-medium mb-2">
-                  Añadir horas extra (10€ por cada hora):
+                  Añadir horas extra (20€ por cada hora):
                 </p>
                 <div className="flex flex-wrap justify-center items-center gap-6">
                   {canAddBefore && (
