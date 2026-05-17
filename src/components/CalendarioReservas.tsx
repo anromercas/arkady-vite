@@ -1002,7 +1002,7 @@ export default function CalendarioReservas() {
                   className="mr-2"
                 />
                 <span>
-                  Acepto las{" "}
+                  Declaro haber leído y acepto todas las{" "}
                   <span
                     className="text-blue-500 cursor-pointer"
                     onClick={() => navigate("/normas-uso")}
