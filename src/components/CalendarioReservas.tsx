@@ -1058,7 +1058,7 @@ export default function CalendarioReservas() {
                 </div>
                 <p className="mt-1 text-xs text-gray-500">
                   El total se actualiza según tramo, extras y código
-                  promocional. Las horas extra (10€/h) no se descuentan con el
+                  promocional. Las horas extra (20€/h) no se descuentan con el
                   código.
                 </p>
               </div>

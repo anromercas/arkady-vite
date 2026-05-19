@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import videoReapertura from '../assets/galeria/arkady-reapertura-2026.mp4';
 import instalacion1 from '../assets/galeria/arkadycelebraciones-1.jpeg';
 import instalacion2 from '../assets/galeria/arkadycelebraciones-2.jpeg';
 import instalacion3 from '../assets/galeria/arkadycelebraciones-3.jpeg';
@@ -33,65 +34,79 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
+  Play,
 } from 'lucide-react';
 
+type MediaItem =
+  | { type: 'image'; src: string; alt: string }
+  | { type: 'video'; src: string; alt: string };
 
-const imagenes = [
-  { src: instalacion19, alt: 'cocina equipada 1' },
-  { src: instalacion1, alt: 'cocina equipada 2' },
-  { src: instalacion12, alt: 'cocina equipada 3' },
-  { src: instalacion3, alt: 'cocina y parque de bolas 1' },
-  { src: instalacion18, alt: 'cocina y parque de bolas 2' },
-  { src: instalacion21, alt: 'cocina y parque de bolas 3' },
-  { src: instalacion22, alt: 'local Arkady celebraciones 1' },
-  { src: instalacion23, alt: 'local Arkady celebraciones 2' },
-  { src: instalacion20, alt: 'parque de bolas y máquinas arcade 1' },
-  { src: instalacion16, alt: 'maquinas arcade 1' },
-  { src: instalacion17, alt: 'maquinas arcade 2' },
-  { src: instalacion4, alt: 'parque de bolas y máquinas arcade 2' },
-  { src: instalacion15, alt: 'asientos maquinas arcade' },
-  { src: instalacion2, alt: 'local Arkady celebraciones 3' },
-  { src: instalacion24, alt: 'futbolin 1' },
-  { src: instalacion25, alt: 'local Arkady celebraciones 4' },
-  { src: instalacion5, alt: 'parque de bolas 1' },
-  { src: instalacion7, alt: 'cuarto de baño' },
-  { src: instalacion8, alt: 'parque de bolas 2' },
-  { src: instalacion9, alt: 'parque de bolas 3' },
-  { src: instalacion10, alt: 'parque de bolas 4' },
-  { src: instalacion11, alt: 'parque de bolas 5' },
-  { src: instalacion26, alt: 'parque de bolas 6' },
-  { src: instalacion27, alt: 'parque de bolas 7' },
-  { src: instalacion28, alt: 'parque de bolas 8' },
-  { src: instalacion13, alt: 'diana Arkady celebraciones' },
-  { src: instalacion6, alt: 'alfombra infantil Arkady celebraciones' },
-  { src: instalacion14, alt: 'zona de juegos infantil Arkady celebraciones' },
-
+const imagenes: MediaItem[] = [
+  { type: 'video', src: videoReapertura, alt: 'Vídeo reapertura Arkady 2026' },
+  { type: 'image', src: instalacion19, alt: 'cocina equipada 1' },
+  { type: 'image', src: instalacion1, alt: 'cocina equipada 2' },
+  { type: 'image', src: instalacion12, alt: 'cocina equipada 3' },
+  { type: 'image', src: instalacion3, alt: 'cocina y parque de bolas 1' },
+  { type: 'image', src: instalacion18, alt: 'cocina y parque de bolas 2' },
+  { type: 'image', src: instalacion21, alt: 'cocina y parque de bolas 3' },
+  { type: 'image', src: instalacion22, alt: 'local Arkady celebraciones 1' },
+  { type: 'image', src: instalacion23, alt: 'local Arkady celebraciones 2' },
+  { type: 'image', src: instalacion20, alt: 'parque de bolas y máquinas arcade 1' },
+  { type: 'image', src: instalacion16, alt: 'maquinas arcade 1' },
+  { type: 'image', src: instalacion17, alt: 'maquinas arcade 2' },
+  { type: 'image', src: instalacion4, alt: 'parque de bolas y máquinas arcade 2' },
+  { type: 'image', src: instalacion15, alt: 'asientos maquinas arcade' },
+  { type: 'image', src: instalacion2, alt: 'local Arkady celebraciones 3' },
+  { type: 'image', src: instalacion24, alt: 'futbolin 1' },
+  { type: 'image', src: instalacion25, alt: 'local Arkady celebraciones 4' },
+  { type: 'image', src: instalacion5, alt: 'parque de bolas 1' },
+  { type: 'image', src: instalacion7, alt: 'cuarto de baño' },
+  { type: 'image', src: instalacion8, alt: 'parque de bolas 2' },
+  { type: 'image', src: instalacion9, alt: 'parque de bolas 3' },
+  { type: 'image', src: instalacion10, alt: 'parque de bolas 4' },
+  { type: 'image', src: instalacion11, alt: 'parque de bolas 5' },
+  { type: 'image', src: instalacion26, alt: 'parque de bolas 6' },
+  { type: 'image', src: instalacion27, alt: 'parque de bolas 7' },
+  { type: 'image', src: instalacion28, alt: 'parque de bolas 8' },
+  { type: 'image', src: instalacion13, alt: 'diana Arkady celebraciones' },
+  { type: 'image', src: instalacion6, alt: 'alfombra infantil Arkady celebraciones' },
+  { type: 'image', src: instalacion14, alt: 'zona de juegos infantil Arkady celebraciones' },
 ];
 
 export default function Galeria() {
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const closeModal = useCallback(() => {
+    videoRef.current?.pause();
+    setCurrentIndex(null);
+  }, []);
 
   const showPrev = useCallback(() => {
     if (currentIndex === null) return;
+    videoRef.current?.pause();
     setCurrentIndex((currentIndex - 1 + imagenes.length) % imagenes.length);
   }, [currentIndex]);
 
   const showNext = useCallback(() => {
     if (currentIndex === null) return;
+    videoRef.current?.pause();
     setCurrentIndex((currentIndex + 1) % imagenes.length);
   }, [currentIndex]);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (currentIndex !== null) {
-        if (e.key === 'ArrowLeft')   showPrev();
-        if (e.key === 'ArrowRight')  showNext();
-        if (e.key === 'Escape')      setCurrentIndex(null);
+        if (e.key === 'ArrowLeft')  showPrev();
+        if (e.key === 'ArrowRight') showNext();
+        if (e.key === 'Escape')     closeModal();
       }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [currentIndex, showPrev, showNext]);
+  }, [currentIndex, showPrev, showNext, closeModal]);
+
+  const currentItem = currentIndex !== null ? imagenes[currentIndex] : null;
 
   return (
     <>
@@ -104,54 +119,76 @@ export default function Galeria() {
       <div className="py-8 px-4 max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-center mb-6">Galería de Instalaciones</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {imagenes.map((imagen, i) => (
+          {imagenes.map((item, i) => (
             <div
               key={i}
-              className="overflow-hidden rounded-lg shadow-lg cursor-pointer"
+              className="relative overflow-hidden rounded-lg shadow-lg cursor-pointer"
               onClick={() => setCurrentIndex(i)}
             >
-              <img
-                src={imagen.src}
-                alt={imagen.alt}
-                className="w-full h-56 object-cover hover:scale-105 transition-transform duration-300"
-              />
+              {item.type === 'video' ? (
+                <>
+                  <video
+                    src={item.src}
+                    className="w-full h-56 object-cover hover:scale-105 transition-transform duration-300"
+                    muted
+                    playsInline
+                    preload="metadata"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/20 transition-colors">
+                    <Play size={48} className="text-white drop-shadow-lg" />
+                  </div>
+                </>
+              ) : (
+                <img
+                  src={item.src}
+                  alt={item.alt}
+                  className="w-full h-56 object-cover hover:scale-105 transition-transform duration-300"
+                />
+              )}
             </div>
           ))}
         </div>
       </div>
 
-      {currentIndex !== null && (
+      {currentItem !== null && currentIndex !== null && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
-          {/* Botón cerrar (solo aquí) */}
           <button
             className="absolute top-4 right-4 text-white p-2 hover:bg-white/20 rounded-full"
-            onClick={() => setCurrentIndex(null)}
+            onClick={closeModal}
             aria-label="Cerrar galería"
           >
             <X size={28} />
           </button>
 
-          {/* Flecha anterior en el límite izquierdo */}
           <button
             className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white p-2 hover:bg-white/20 rounded-full"
             onClick={showPrev}
-            aria-label="Imagen anterior"
+            aria-label="Elemento anterior"
           >
             <ChevronLeft size={48} />
           </button>
 
-          {/* Imagen */}
-          <img
-            src={imagenes[currentIndex].src}
-            alt={imagenes[currentIndex].alt}
-            className="max-h-[90vh] max-w-[80vw] rounded-lg shadow-xl"
-          />
+          {currentItem.type === 'video' ? (
+            <video
+              ref={videoRef}
+              key={currentItem.src}
+              src={currentItem.src}
+              controls
+              autoPlay
+              className="max-h-[90vh] max-w-[80vw] rounded-lg shadow-xl"
+            />
+          ) : (
+            <img
+              src={currentItem.src}
+              alt={currentItem.alt}
+              className="max-h-[90vh] max-w-[80vw] rounded-lg shadow-xl"
+            />
+          )}
 
-          {/* Flecha siguiente en el límite derecho */}
           <button
             className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white p-2 hover:bg-white/20 rounded-full"
             onClick={showNext}
-            aria-label="Imagen siguiente"
+            aria-label="Elemento siguiente"
           >
             <ChevronRight size={48} />
           </button>
