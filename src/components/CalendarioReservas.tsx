@@ -6,6 +6,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { supabase } from "@/lib/supabase";
 
 interface Reserva {
   nombre: string;
@@ -25,12 +26,16 @@ interface Reserva {
 }
 
 interface Promotion {
-  start: string;
-  end: string;
-  promotionCode: string;
+  id: string;
+  code: string;
   percentage: number;
-  days: string; // p.ej. "lun-jue" o "Sab-dom-fest"
-  tramoHorario: string;
+  valid_from: string;
+  valid_to: string;
+}
+
+interface SlotData {
+  dia_seleccionado: string;
+  tramo_horario: string;
 }
 
 interface ValidationResult {
@@ -62,20 +67,13 @@ const tramosHorarios = [
   { label: "17:00 - 22:00", type: "tarde" },
 ];
 
-// Endpoint para obtener reservas
-// const RESERVAS_ENDPOINT =
-// "https://script.google.com/macros/s/AKfycbwclDYmwMtZjlUHk070xsrMpHCfKo_0fKE8neNy3mHgB_ztJvstlKtn06xNJ-JVP8Y2/exec"; // Nuria
-const RESERVAS_ENDPOINT =
-  "https://script.google.com/macros/s/AKfycbw0b2KgTQpYaob_e0fU2IS5fgu0pY14zBMvpEOaoz-LNoM8PipJ0QpLqk5XztpKJ-KgGw/exec"; // Arkady producción
-// const RESERVAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbw0b2KgTQpYaob_e0fU2IS5fgu0pY14zBMvpEOaoz-LNoM8PipJ0QpLqk5XztpKJ-KgGwaaaaaaa/exec"; // Arkady producción  BROCKEN
-
 export default function CalendarioReservas() {
   const [fechaSeleccionada, setFechaSeleccionada] = useState<Date | null>(null);
   const [tramoSeleccionado, setTramoSeleccionado] = useState<string | null>(
     null,
   );
   const [promotionsData, setPromotionsData] = useState<Promotion[]>([]);
-  const [selectedPromo, setSelectedPromo] = useState<Promotion | null>(null);
+  const [slotsData, setSlotsData] = useState<SlotData[]>([]);
   const [formData, setFormData] = useState<Reserva>({
     nombre: "",
     email: "",
@@ -93,7 +91,6 @@ export default function CalendarioReservas() {
     extraHoraDespues: false,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [reservasData, setReservasData] = useState<Reserva[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const navigate = useNavigate();
@@ -106,119 +103,62 @@ export default function CalendarioReservas() {
 
   const fetchReservas = useCallback(async () => {
     try {
-      const response = await fetch(RESERVAS_ENDPOINT);
-      if (!response.ok) throw new Error("Error al obtener reservas");
-      const data = await response.json();
-      const raw: Reserva[] = data.raw || [];
-      setReservasData(raw);
-      setPromotionsData(data.promotions || []);
+      const [slotsRes, promosRes] = await Promise.all([
+        supabase
+          .from("public_availability")
+          .select("dia_seleccionado, tramo_horario"),
+        supabase
+          .from("promotions")
+          .select("id, code, percentage, valid_from, valid_to"),
+      ]);
+      if (slotsRes.error) throw slotsRes.error;
+      if (promosRes.error) throw promosRes.error;
+      setSlotsData(slotsRes.data ?? []);
+      setPromotionsData(promosRes.data ?? []);
     } catch (err: any) {
       console.error(err);
-      toast.error(err.message);
+      toast.error("Error al cargar disponibilidad");
     } finally {
       setLoading(false);
     }
   }, []);
 
+  // Solo ejecutar en cliente (patrón SSG del proyecto — evita hydration mismatch)
   useEffect(() => {
-    fetchReservas();
+    if (typeof window !== "undefined") {
+      fetchReservas();
+    }
   }, [fetchReservas]);
 
-  /**
-   * Devuelve el objeto Promotion válido para un código y fecha dados,
-   * o null si no hay ninguno.
-   */
+  // Devuelve la promo válida para el código y fecha dados.
+  // La validación por tramo/día ocurre en el servidor; aquí solo chequeamos
+  // código y rango de fechas para el preview de precio en tiempo real.
   const getValidPromotion = (
     code: string,
     date: Date,
-    tramoType: string,
+    _tramoType: string,
   ): Promotion | null => {
-    const norm = (s: string) =>
-      (s || "")
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase()
-        .trim();
-
     const codeUp = code.trim().toUpperCase();
-
-    // 1) Por código
-    const byCode = promotionsData.filter(
-      (p) => (p.promotionCode || "").toString().trim().toUpperCase() === codeUp,
+    const match = promotionsData.find(
+      (p) => p.code.trim().toUpperCase() === codeUp,
     );
-    if (byCode.length === 0) {
-      throw new Error("INVALID_CODE");
-    }
+    if (!match) throw new Error("INVALID_CODE");
 
-    // 2) Por tramo ("todos" o el tramo del usuario)
-    const tramoUser = norm(tramoType); // "dia completo" | "mañana" | "tarde"
-    const byTramo = byCode.filter((p) => {
-      const tramoPromo = norm(p.tramoHorario);
-      return tramoPromo === "todos" || tramoPromo === tramoUser;
-    });
-    if (byTramo.length === 0) {
-      throw new Error("INVALID_TRAMO");
-    }
-
-    // 3) Por rango de fechas (evita problemas de husos)
     const ts = new Date(date.getTime());
     ts.setHours(12, 0, 0, 0);
-    const inDateRange = byTramo.filter((p) => {
-      const start = new Date(p.start);
-      start.setHours(0, 0, 0, 0);
-      const end = new Date(p.end);
-      end.setHours(23, 59, 59, 999);
-      return ts >= start && ts <= end;
-    });
-    if (inDateRange.length === 0) {
-      throw new Error("INVALID_DATE");
-    }
+    const from = new Date(match.valid_from + "T00:00:00");
+    const to = new Date(match.valid_to + "T23:59:59");
+    if (ts < from || ts > to) throw new Error("INVALID_DATE");
 
-    // 4) Resolver tokens del día
-    const keyToday = formatDateKey(date);
-    const tomorrow = new Date(date);
-    tomorrow.setDate(date.getDate() + 1);
-    const holidays = generateHolidays(date.getFullYear()).concat(
-      generateHolidays(date.getFullYear() + 1),
-    );
-    const isFestivo = holidays.includes(keyToday);
-    const isVispFest = holidays.includes(formatDateKey(tomorrow));
-    const dow = date.getDay(); // 0=dom, 6=sab
-
-    const wantedTokens =
-      dow === 6
-        ? ["sab"]
-        : dow === 0
-          ? ["dom"]
-          : isFestivo
-            ? ["fest"]
-            : dow === 5 || isVispFest
-              ? ["vie", "visp.fest"]
-              : ["lun", "mar", "mie", "jue"];
-
-    // 5) Elegir promo: primero específica, si no hay → "todos"
-    const matchesSpecific = (p: Promotion) => {
-      const ds = norm(p.days).split("-");
-      return wantedTokens.some((t) => ds.includes(t));
-    };
-    const isTodos = (p: Promotion) => norm(p.days).split("-").includes("todos");
-
-    const specific = inDateRange.find(matchesSpecific);
-    if (specific) return specific;
-
-    const catchAll = inDateRange.find(isTodos);
-    return catchAll || null; // sin error: simplemente no aplica promo ese día
+    return match;
   };
 
-  // Agrupa reservas por día
-  const aggregatedMap = reservasData.reduce(
-    (acc: { [key: string]: string[] }, reserva) => {
-      // Convertir la cadena ISO a Date y formatearla de forma consistente
-      const key = formatDateKey(new Date(reserva.diaSeleccionado));
-      if (key) {
-        if (!acc[key]) acc[key] = [];
-        acc[key].push(reserva.tramoHorario);
-      }
+  // Agrupa slots por día para pintar el calendario
+  const aggregatedMap = slotsData.reduce(
+    (acc: { [key: string]: string[] }, slot) => {
+      const key = slot.dia_seleccionado;
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(slot.tramo_horario);
       return acc;
     },
     {},
@@ -443,7 +383,6 @@ export default function CalendarioReservas() {
 
     const code = formData.codigoPromocional?.trim();
     if (!code) {
-      setSelectedPromo(null);
     }
     let promoValida: Promotion | undefined;
     if (code) {
@@ -480,11 +419,9 @@ export default function CalendarioReservas() {
         }
       }
     } else {
-      setSelectedPromo(null);
     }
 
     setErrors(nuevosErrores);
-    setSelectedPromo(promoValida || null);
     return {
       valid: Object.keys(nuevosErrores).length === 0,
       promoValida,
@@ -546,56 +483,34 @@ export default function CalendarioReservas() {
   };
 
   const agregarReserva = async (reserva: Reserva, promoValida?: Promotion) => {
-    try {
-      console.log("reserva ", reserva);
-      // Cálculo de horas extra e importe
-      const extraCount =
-        (reserva.extraHoraAntes ? 1 : 0) + (reserva.extraHoraDespues ? 1 : 0);
-      const params = new URLSearchParams();
-      params.append("nombre", reserva.nombre);
-      params.append("email", reserva.email);
-      params.append("dni", reserva.dni);
-      params.append("telefono", reserva.telefono);
-      params.append("domicilio", reserva.domicilio);
-      params.append("codigoPostal", reserva.codigoPostal);
-      if (promoValida) {
-        // envía todo el objeto como JSON
-        params.append("promocion", JSON.stringify(promoValida));
-      }
-      // params.append('codigoPromocional', reserva.codigoPromocional ? reserva.codigoPromocional : '');
-      params.append("diaSeleccionado", reserva.diaSeleccionado);
-      params.append("tramoHorario", reserva.tramoHorario);
-      params.append("aceptaSonido", reserva.aceptaSonido ? "true" : "false");
-      params.append(
-        "aceptaMobiliario",
-        reserva.aceptaMobiliario ? "true" : "false",
-      );
-      params.append("aceptaNormas", reserva.aceptaNormas ? "true" : "false");
-      params.append("fechaReserva", new Date().toISOString().split("T")[0]);
-      params.append(
-        "extraHoraAntes",
-        reserva.extraHoraAntes ? "true" : "false",
-      );
-      params.append(
-        "extraHoraDespues",
-        reserva.extraHoraDespues ? "true" : "false",
-      );
-      params.append("horasExtra", String(extraCount));
-
-      const response = await fetch(RESERVAS_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+    const { data, error } = await supabase.functions.invoke(
+      "create-reservation",
+      {
+        body: {
+          nombre: reserva.nombre,
+          email: reserva.email,
+          dni: reserva.dni,
+          telefono: reserva.telefono,
+          domicilio: reserva.domicilio,
+          codigoPostal: reserva.codigoPostal,
+          diaSeleccionado: reserva.diaSeleccionado,
+          tramoHorario: reserva.tramoHorario,
+          aceptaNormas: reserva.aceptaNormas,
+          aceptaSonido: reserva.aceptaSonido,
+          aceptaMobiliario: reserva.aceptaMobiliario,
+          extraHoraAntes: reserva.extraHoraAntes ?? false,
+          extraHoraDespues: reserva.extraHoraDespues ?? false,
+          promocion: promoValida
+            ? {
+                percentage: promoValida.percentage,
+                promotionCode: promoValida.code,
+              }
+            : null,
         },
-        body: params.toString(),
-        // body: JSON.stringify(reserva),
-      });
-      const result = await response.json();
-      return result;
-    } catch (error) {
-      console.error("Error al agregar reserva:", error);
-      throw error;
-    }
+      },
+    );
+    if (error) throw error;
+    return data;
   };
 
   // dayPropGetter asigna estilos a cada día:
@@ -829,7 +744,9 @@ export default function CalendarioReservas() {
           formats={formats}
           views={{ month: true }}
           longPressThreshold={1}
-          onSelectSlot={(slotInfo) => handleDayClick(slotInfo.start)}
+          onSelectSlot={(slotInfo: { start: Date }) =>
+            handleDayClick(slotInfo.start)
+          }
           selectable
           style={{ height: 400 }}
           dayPropGetter={dayPropGetter}
@@ -1058,7 +975,7 @@ export default function CalendarioReservas() {
                 </div>
                 <p className="mt-1 text-xs text-gray-500">
                   El total se actualiza según tramo, extras y código
-                  promocional. Las horas extra (10€/h) no se descuentan con el
+                  promocional. Las horas extra (20€/h) no se descuentan con el
                   código.
                 </p>
               </div>
